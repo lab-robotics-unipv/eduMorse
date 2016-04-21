@@ -13,8 +13,10 @@ with open("test_toml/r.toml") as conffile:
 
 robots = []
 for rob in config['robot']:
-    if rob['id'] in rob.keys():
+    if rob['id'] in robots:
+        print('#############################')
         print('Error: robot id is not unique')
+        print('#############################')
         exit()
     robot = eval(rob['type'] + '()')
     x = rob['x']
@@ -25,16 +27,26 @@ for rob in config['robot']:
     r = rob['r']
     robot.translate(x, y, z)
     robot.rotate(p, q, r)
+    aes = []  #actuators and sensors
     for act in rob['actuators']:
+        if act['id'] in aes:
+            print('################################')
+            print('Error: actuator id is not unique')
+            print('################################')
+            exit()
         motion = eval(act['type'] + '()')
         robot.append(motion)
+        aes.append(act['id'])
     for sens in rob['sensors']:
         sensor = eval(sens['type'] + '()')
         robot.append(sensor)
-#        prop = eval(sens['properties'])
-#        sensor.properties(prop)
-    robot.add_default_interface(rob['interface'][0]['type'])
-#    robots[rob['id']].append(robot)
+        sensor.set_property('ControlType', 'Position')
+        #prop = eval(sens['properties'])
+        #sensor.properties(eval(sens['properties']))
+        aes.append(sens['id'])
+    for interf in rob['interface']:
+        robot.add_default_interface(interf['type'])
+    robots.append(rob['id'])
 
 # Add the MORSE mascott, MORSY.
 # Out-the-box available robots are listed here:
@@ -55,7 +67,7 @@ for rob in config['robot']:
 # 'morse add actuator <name> my_project' can help you with the creation of a custom
 # actuator.
 # motion = MotionVW()
-#  robot.append(motion)
+# robot.append(motion)
 
 
 # Add a keyboard controller to move the robot with arrow keys.
