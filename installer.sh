@@ -14,3 +14,4 @@ sudo apt-get install -y g++
 cmake ..
 sudo make install
 morse check
+echo "source ~/simulator/environ.sh" >> ~/.bashrc
