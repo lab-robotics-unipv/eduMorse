@@ -14,4 +14,6 @@ sudo apt-get install -y g++
 cmake ..
 sudo make install
 morse check
+sudo apt-get install -y python3-pip
+sudo pip3 install pytoml
 echo "source ~/simulator/environ.sh" >> ~/.bashrc
