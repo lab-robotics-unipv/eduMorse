@@ -16,31 +16,33 @@
     [[robot.sensors]]
         id = 'keyboard'
         type = 'Keyboard'
-        properties = "ControlType = 'Position'"
+        [robot.sensors.properties]
+            ControlType = 'Position'
     [[robot.sensors]]
         id = 'pose'
         type = 'Pose'
     [[robot.interface]]
         type = 'socket'
 
-[[robot]]
-    id = 'robot2'
-    type = 'ATRV'
-    x = 5
-    y = 0
-    z = 0
-    p = 0
-    q = 0
-    r = 3.5
-    [[robot.actuators]]
-        id = 'motion1'
-        type = 'MotionVW'
-    [[robot.sensors]]
-        id = 'keyboard'
-        type = 'Keyboard'
-        properties = "ControlType = 'Position'"
-    [[robot.sensors]]
-        id = 'pose'
-        type = 'Pose'
-    [[robot.interface]]
-        type = 'socket'
+#[[robot]]
+#    id = 'robot2'
+#    type = 'ATRV'
+#    x = 5
+#    y = 0
+#    z = 0
+#    p = 0
+#    q = 0
+#    r = 3.5
+#    [[robot.actuators]]
+#        id = 'motion1'
+#        type = 'MotionVW'
+#    [[robot.sensors]]
+#        id = 'keyboard'
+#        type = 'Keyboard'
+#        [robot.sensors.properties]
+#            ControlType = 'Position'
+#    [[robot.sensors]]
+#        id = 'pose'
+#        type = 'Pose'
+#    [[robot.interface]]
+#        type = 'socket'

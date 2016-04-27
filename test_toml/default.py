@@ -6,7 +6,7 @@ Feel free to edit this template as you like!
 """
 
 from morse.builder import *
-import toml
+import pytoml as toml
 
 with open("test_toml/r.toml") as conffile:
     config = toml.loads(conffile.read())
