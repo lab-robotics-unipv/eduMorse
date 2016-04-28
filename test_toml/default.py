@@ -35,21 +35,15 @@ for rob in config['robot']:
             print('Error: actuator id is not unique')
             print('################################')
             exit()
-        motion = eval(act['type'] + '()')
-        motion.name = act['id']
-        robot.append(motion)
+        actuator = eval(act['type'] + '()')
+        actuator.name = act['id']
+        robot.append(actuator)
         aes.append(act['id'])
     for sens in rob['sensors']:
         sensor = eval(sens['type'] + '()')
         sensor.name = sens['id']
-        #print('#####')
-        #print(sensor.__dict__)#.get_properties()
-        #print('#####')
-        #print(type(sensor))
-        robot.append(sensor)
-        #sensor.get_properties()
-        #sensor.set_property('ControlType', 'Position')
         sensor.properties(**sens['properties'])
+        robot.append(sensor)
         aes.append(sens['id'])
     for interf in rob['interface']:
         robot.add_default_interface(interf['type'])
