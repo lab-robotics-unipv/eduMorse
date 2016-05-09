@@ -1,0 +1,11 @@
+# vim: set filetype=python:
+
+
+env = Environment()
+env.Append(JAVACLASSPATH='lib/json-simple-1.1.1.jar')
+
+env.Java('obj',Glob('src'))
+t = env.Jar('RobotSimulation','obj')
+
+# env.NoClean('main')
+env.Clean(t, Glob('obj/*'))
