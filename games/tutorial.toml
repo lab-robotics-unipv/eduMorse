@@ -1,0 +1,8 @@
+[game]
+	numrobot = 1
+	numobject = 0
+	map = "tutorial"
+	[[robot_position]]
+		x = 7
+		y = 7
+	
