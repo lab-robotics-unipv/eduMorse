@@ -1,0 +1,3 @@
+[game]
+    game = "tutorial"
+    robot_file = ["r"]
