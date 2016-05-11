@@ -7,8 +7,37 @@ Feel free to edit this template as you like!
 
 from morse.builder import *
 import pytoml as toml
+import os
 
-with open("test_toml/r.toml") as conffile:
+PWD = '/home/robitca/simulator/test_toml'
+
+gamespath = os.environ.get("GAMESPATH")
+mapspath = os.path.join(gamespath, "maps")
+
+with open(os.path.join(PWD, "g.toml")) as gamefile:
+    g = toml.loads(gamefile.read())
+
+game_name = g['game']['game'] + '.toml'    #to do: check also if .toml is present
+
+if os.path.exists(os.path.join(PWD, game_name)):
+    pass
+elif os.path.exists(os.path.join(gamespath, game_name)):
+    game_name = os.path.join(gamespath, game_name)
+else:
+    print("Error: game file doesn't exist")
+    print('#############################')
+    exit()
+
+for r in g['game']['robot_file']:
+    robot_file = r + '.toml'
+    if os.path.exists(os.path.join(PWD, robot_file)):
+        pass
+    else:
+        print("Error: robot file doesn't exist")
+        print('#############################')
+        exit()
+
+with open(os.path.join(PWD, "r.toml")) as conffile:
     config = toml.loads(conffile.read())
 
 robots = []
