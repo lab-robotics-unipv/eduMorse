@@ -14,32 +14,33 @@ PWD = '/home/robitca/simulator/test_toml'
 GAMESPATH = os.environ.get("GAMESPATH")
 MAPSPATH = os.path.join(GAMESPATH, "maps")
 
+# control if a file exists
+def findFile(filename, extension, paths):
+	for path in paths:
+		if os.path.exists(os.path.join(path, filename)):
+			return os.path.join(path, filename)
+		elif os.path.join(path, filename + '.' + extension):
+			return os.path.join(path, filename + '.' + extension)
+	raise FileNotFoundError('File ' + filename + ' not found')
+
 # g.toml game configuration
 with open(os.path.join(PWD, "g.toml")) as gfile:
 	g = toml.loads(gfile.read())
 
 game_name = g['game']['game']
+try:
+	findFile(game_name, 'toml', [PWD, GAMESPATH])
+except:
+	raise
 
-# control if game file exists
-if os.path.exists(os.path.join(PWD, game_name)):
-	pass
-elif os.path.exists(os.path.join(PWD, game_name + '.toml')):
-	game_name = os.path.join(PWD, game_name + '.toml')
-elif os.path.exists(os.path.join(GAMESPATH, game_name)):
-	game_name = os.path.join(GAMESPATH, game_name)
-elif os.path.exists(os.path.join(GAMESPATH, game_name + '.toml')):
-	game_name = os.path.join(GAMESPATH, game_name + '.toml')
-else:
-	print("Error: game file doesn't exist")
-	print('#############################')
-	exit()
-
-with open(os.path.join(GAMESPATH, game_name)) as gamefile:
+with open(game_name) as gamefile:
 	game = toml.loads(gamefile.read())
 
 num_robot = game['game']['numrobot']
 num_object = game['game']['numobject']
-map_name = os.path.join(game['game']['map'], ".blend")
+map_name = game['game']['map']
+
+# TODO use findFile for maps and robots
 
 # control if any robot file exists
 for r in g['game']['robot_file']:
