@@ -11,27 +11,31 @@ import os
 
 PWD = '/home/robitca/simulator/test_toml'
 
-gamespath = os.environ.get("GAMESPATH")
-mapspath = os.path.join(gamespath, "maps")
+GAMESPATH = os.environ.get("GAMESPATH")
+MAPSPATH = os.path.join(GAMESPATH, "maps")
 
 # g.toml game configuration
 with open(os.path.join(PWD, "g.toml")) as gfile:
-    g = toml.loads(gfile.read())
+	g = toml.loads(gfile.read())
 
-game_name = g['game']['game'] + '.toml'    #to do: check also if .toml is present
+game_name = g['game']['game']
 
 # control if game file exists
 if os.path.exists(os.path.join(PWD, game_name)):
-    pass
-elif os.path.exists(os.path.join(gamespath, game_name)):
-    game_name = os.path.join(gamespath, game_name)
+	pass
+elif os.path.exists(os.path.join(PWD, game_name + '.toml')):
+	game_name = os.path.join(PWD, game_name + '.toml')
+elif os.path.exists(os.path.join(GAMESPATH, game_name)):
+	game_name = os.path.join(GAMESPATH, game_name)
+elif os.path.exists(os.path.join(GAMESPATH, game_name + '.toml')):
+	game_name = os.path.join(GAMESPATH, game_name + '.toml')
 else:
-    print("Error: game file doesn't exist")
-    print('#############################')
-    exit()
+	print("Error: game file doesn't exist")
+	print('#############################')
+	exit()
 
-with open(os.path.join("/home/robitca/simulator/games/", game_name)) as gamefile:
-    game = toml.loads(gamefile.read())
+with open(os.path.join(GAMESPATH, game_name)) as gamefile:
+	game = toml.loads(gamefile.read())
 
 num_robot = game['game']['numrobot']
 num_object = game['game']['numobject']
@@ -39,63 +43,63 @@ map_name = os.path.join(game['game']['map'], ".blend")
 
 # control if any robot file exists
 for r in g['game']['robot_file']:
-    robot_file = r + '.toml'
-    if os.path.exists(os.path.join(PWD, robot_file)):
-        pass
-    else:
-        print("Error: robot file doesn't exist")
-        print('#############################')
-        exit()
-    config = []
-    with open(os.path.join(PWD, robot_file)) as conffile:
-        config.append(toml.loads(conffile.read()))
-#        for j in config:
-#           for i in config['robot']:
+	robot_file = r + '.toml'
+	if os.path.exists(os.path.join(PWD, robot_file)):
+		pass
+	else:
+		print("Error: robot file doesn't exist")
+		print('#############################')
+		exit()
+		config = []
+		with open(os.path.join(PWD, robot_file)) as conffile:
+			config.append(toml.loads(conffile.read()))
+			#        for j in config:
+			#           for i in config['robot']:
 
-        if len(config) > num_robot:
-            print("error: too many robots!")
-            print('#############################')
-            exit()
+		if len(config) > num_robot:
+			print("error: too many robots!")
+			print('#############################')
+			exit()
 
 # robot configuration files
 for robot_config in config:
-    robots = []
-    for rob in robot_config['robot']:
-        if rob['id'] in robots:
-            print('#############################')
-            print('Error: robot id is not unique')
-            print('#############################')
-            exit()
-        robot = eval(rob['type'] + '()')
-        robot.name = rob['id']
-        x = rob['x']
-        y = rob['y']
-        z = rob['z']
-        p = rob['p']
-        q = rob['q']
-        r = rob['r']
-        robot.translate(x, y, z)
-        robot.rotate(p, q, r)
-        aes = []  #actuators and sensors
-        for act in rob['actuators']:
-            if act['id'] in aes:
-                print('################################')
-                print('Error: actuator id is not unique')
-                print('################################')
-                exit()
-            actuator = eval(act['type'] + '()')
-            actuator.name = act['id']
-            robot.append(actuator)
-            aes.append(act['id'])
-        for sens in rob['sensors']:
-            sensor = eval(sens['type'] + '()')
-            sensor.name = sens['id']
-            sensor.properties(**sens['properties'])
-            robot.append(sensor)
-            aes.append(sens['id'])
-        for interf in rob['interface']:
-            robot.add_default_interface(interf['type'])
-        robots.append(rob['id'])
+	robots = []
+	for rob in robot_config['robot']:
+		if rob['id'] in robots:
+			print('#############################')
+			print('Error: robot id is not unique')
+			print('#############################')
+			exit()
+			robot = eval(rob['type'] + '()')
+			robot.name = rob['id']
+			x = rob['x']
+			y = rob['y']
+			z = rob['z']
+			p = rob['p']
+			q = rob['q']
+			r = rob['r']
+			robot.translate(x, y, z)
+			robot.rotate(p, q, r)
+			aes = []  #actuators and sensors
+			for act in rob['actuators']:
+				if act['id'] in aes:
+					print('################################')
+					print('Error: actuator id is not unique')
+					print('################################')
+					exit()
+					actuator = eval(act['type'] + '()')
+					actuator.name = act['id']
+					robot.append(actuator)
+					aes.append(act['id'])
+					for sens in rob['sensors']:
+						sensor = eval(sens['type'] + '()')
+						sensor.name = sens['id']
+						sensor.properties(**sens['properties'])
+						robot.append(sensor)
+						aes.append(sens['id'])
+						for interf in rob['interface']:
+							robot.add_default_interface(interf['type'])
+							robots.append(rob['id'])
 
 # Add the MORSE mascott, MORSY.
 # Out-the-box available robots are listed here:
