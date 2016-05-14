@@ -9,7 +9,7 @@ from morse.builder import *
 import pytoml as toml
 import os
 
-PWD = '/home/robitca/simulator/test_toml'
+PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
 
 GAMESPATH = os.environ.get("GAMESPATH")
 MAPSPATH = os.path.join(GAMESPATH, "maps")
@@ -29,45 +29,44 @@ with open(os.path.join(PWD, "g.toml")) as gfile:
 
 game_name = g['game']['game']
 try:
-	findFile(game_name, 'toml', [PWD, GAMESPATH])
+	game_file = findFile(game_name, 'toml', [PWD, GAMESPATH])
 except:
 	raise
 
-with open(game_name) as gamefile:
+with open(game_file) as gamefile:
 	game = toml.loads(gamefile.read())
 
 num_robot = game['game']['numrobot']
 num_object = game['game']['numobject']
 map_name = game['game']['map']
 
-# TODO use findFile for maps and robots
+try:
+    map_file = findFile(map_name, 'blend', [MAPSPATH])
+except:
+    raise
 
 # control if any robot file exists
+config = []
+num = 0
 for r in g['game']['robot_file']:
-	robot_file = r + '.toml'
-	if os.path.exists(os.path.join(PWD, robot_file)):
-		pass
-	else:
-		print("Error: robot file doesn't exist")
-		print('#############################')
-		exit()
-		config = []
-		with open(os.path.join(PWD, robot_file)) as conffile:
-			config.append(toml.loads(conffile.read()))
-			#        for j in config:
-			#           for i in config['robot']:
+	try:
+		robot_file = findFile(r, 'toml', [PWD])
+	except:
+		raise
+	with open(robot_file) as rfile:
+		config.append(toml.loads(rfile.read()))
+	for i in config:
+		for j in i['robot']:
+			num += 1
 
-		if len(config) > num_robot:
-			print("error: too many robots!")
-			print('#############################')
-			exit()
+	if num > num_robot:
+		raise Exception('Too many robots')
 
 # robot configuration files
 for robot_config in config:
 	robots = []
 	for rob in robot_config['robot']:
 		if rob['id'] in robots:
-			print('#############################')
 			print('Error: robot id is not unique')
 			print('#############################')
 			exit()
@@ -84,7 +83,6 @@ for robot_config in config:
 			aes = []  #actuators and sensors
 			for act in rob['actuators']:
 				if act['id'] in aes:
-					print('################################')
 					print('Error: actuator id is not unique')
 					print('################################')
 					exit()
@@ -101,6 +99,10 @@ for robot_config in config:
 						for interf in rob['interface']:
 							robot.add_default_interface(interf['type'])
 							robots.append(rob['id'])
+
+env = Environment(map_file, fastmode = False)
+env.set_camera_location([-18.0, -6.7, 10.8])
+env.set_camera_rotation([1.09, 0, -1.14])
 
 # Add the MORSE mascott, MORSY.
 # Out-the-box available robots are listed here:
@@ -148,7 +150,7 @@ for robot_config in config:
 
 
 # set 'fastmode' to True to switch to wireframe mode
-env = Environment('indoors-1/indoor-1', fastmode = False)
-env.set_camera_location([-18.0, -6.7, 10.8])
-env.set_camera_rotation([1.09, 0, -1.14])
+#env = Environment('indoors-1/indoor-1', fastmode = False)
+#env.set_camera_location([-18.0, -6.7, 10.8])
+#env.set_camera_rotation([1.09, 0, -1.14])
 
