@@ -45,6 +45,8 @@ try:
 except:
     raise
 
+# se più file si chiamano uguale
+
 # control if any robot file exists
 config = []
 num = 0
@@ -53,11 +55,11 @@ for r in g['game']['robot_file']:
 		robot_file = findFile(r, 'toml', [PWD])
 	except:
 		raise
+
 	with open(robot_file) as rfile:
 		config.append(toml.loads(rfile.read()))
 	for i in config:
-		for j in i['robot']:
-			num += 1
+		num += len(i['robot'])
 
 	if num > num_robot:
 		raise Exception('Too many robots')
@@ -70,37 +72,42 @@ for robot_config in config:
 			print('Error: robot id is not unique')
 			print('#############################')
 			exit()
-			robot = eval(rob['type'] + '()')
-			robot.name = rob['id']
-			x = rob['x']
-			y = rob['y']
-			z = rob['z']
-			p = rob['p']
-			q = rob['q']
-			r = rob['r']
-			robot.translate(x, y, z)
-			robot.rotate(p, q, r)
-			aes = []  #actuators and sensors
-			for act in rob['actuators']:
-				if act['id'] in aes:
-					print('Error: actuator id is not unique')
-					print('################################')
-					exit()
-					actuator = eval(act['type'] + '()')
-					actuator.name = act['id']
-					robot.append(actuator)
-					aes.append(act['id'])
-					for sens in rob['sensors']:
-						sensor = eval(sens['type'] + '()')
-						sensor.name = sens['id']
-						sensor.properties(**sens['properties'])
-						robot.append(sensor)
-						aes.append(sens['id'])
-						for interf in rob['interface']:
-							robot.add_default_interface(interf['type'])
-							robots.append(rob['id'])
 
-env = Environment(map_file, fastmode = False)
+		robot = eval(rob['type'] + '()')
+		robot.name = rob['id']
+		x = rob['x']
+		y = rob['y']
+		z = rob['z']
+		p = rob['p']
+		q = rob['q']
+		r = rob['r']
+		robot.translate(x, y, z)
+		robot.rotate(p, q, r)
+		aes = []  #actuators and sensors
+
+		for act in rob['actuators']:
+			if act['id'] in aes:
+				print('Error: actuator id is not unique')
+				print('################################')
+				exit()
+			actuator = eval(act['type'] + '()')
+			actuator.name = act['id']
+			robot.append(actuator)
+			aes.append(act['id'])
+
+		for sens in rob['sensors']:
+			sensor = eval(sens['type'] + '()')
+			sensor.name = sens['id']
+			sensor.properties(**sens['properties'])
+			robot.append(sensor)
+			aes.append(sens['id'])
+
+		for interf in rob['interface']:
+			robot.add_default_interface(interf['type'])
+			robots.append(rob['id'])
+
+env = Environment('indoors-1/indoor-1', fastmode = False)
+#env = Environment(map_file, fastmode = False)
 env.set_camera_location([-18.0, -6.7, 10.8])
 env.set_camera_rotation([1.09, 0, -1.14])
 
