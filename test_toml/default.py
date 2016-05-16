@@ -19,7 +19,7 @@ def findFile(filename, extension, paths):
 	for path in paths:
 		if os.path.exists(os.path.join(path, filename)):
 			return os.path.join(path, filename)
-		elif os.path.join(path, filename + '.' + extension):
+		elif os.path.exists(os.path.join(path, filename + '.' + extension)):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
@@ -41,7 +41,7 @@ num_object = game['game']['numobject']
 map_name = game['game']['map']
 
 try:
-    map_file = findFile(map_name, 'blend', [MAPSPATH])
+    map_file = findFile(map_name, 'blend', [PWD, MAPSPATH])
 except:
     raise
 
