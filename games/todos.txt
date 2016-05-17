@@ -1,0 +1,2 @@
+- mettere le telecamere nei giochi
+- spostare il tutto in /opt con l'installer
