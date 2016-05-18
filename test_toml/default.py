@@ -69,10 +69,7 @@ for robot_config in config:
 	robots = []
 	for rob in robot_config['robot']:
 		if rob['id'] in robots:
-			# TODO change with raise
-			print('Error: robot id is not unique')
-			print('#############################')
-			exit()
+			raise Exception('Robot id is not unique')
 
 		robot = eval(rob['type'] + '()')
 		robot.name = rob['id']
@@ -88,10 +85,7 @@ for robot_config in config:
 
 		for act in rob['actuators']:
 			if act['id'] in aes:
-				# TODO change with raise
-				print('Error: actuator id is not unique')
-				print('################################')
-				exit()
+				raise Exception('Actuator id is not unique')
 			actuator = eval(act['type'] + '()')
 			actuator.name = act['id']
 			robot.append(actuator)
@@ -106,7 +100,8 @@ for robot_config in config:
 
 		for interf in rob['interface']:
 			robot.add_default_interface(interf['type'])
-			robots.append(rob['id'])
+
+		robots.append(rob['id'])
 
 
 # TODO tirare dentro gli oggetti
