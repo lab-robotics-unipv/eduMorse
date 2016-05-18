@@ -10,11 +10,10 @@ import pytoml as toml
 import os
 
 PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
-
 GAMESPATH = os.environ.get("GAMESPATH")
 MAPSPATH = os.path.join(GAMESPATH, "maps")
 
-# control if a file exists
+# Control if a file exists
 def findFile(filename, extension, paths):
 	for path in paths:
 		if os.path.exists(os.path.join(path, filename)):
@@ -23,10 +22,11 @@ def findFile(filename, extension, paths):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
-# g.toml game configuration
+# Load the game configuration file
 with open(os.path.join(PWD, "g.toml")) as gfile:
 	g = toml.loads(gfile.read())
 
+# Check if game file exists and load it
 game_name = g['game']['game']
 try:
 	game_file = findFile(game_name, 'toml', [PWD, GAMESPATH])
@@ -36,18 +36,18 @@ except:
 with open(game_file) as gamefile:
 	game = toml.loads(gamefile.read())
 
-num_robot = game['game']['numrobot']
-num_object = game['game']['numobject']
+# Check if map file exists
 map_name = game['game']['map']
-
 try:
     map_file = findFile(map_name, 'blend', [PWD, MAPSPATH])
 except:
     raise
 
-# se più file si chiamano uguale
+# TODO se più file si chiamano uguale
 
-# control if any robot file exists
+
+# Check if any robot file exists and if we have the right number of robots
+num_robot = game['game']['numrobot']
 config = []
 num = 0
 for r in g['game']['robot_file']:
@@ -69,6 +69,7 @@ for robot_config in config:
 	robots = []
 	for rob in robot_config['robot']:
 		if rob['id'] in robots:
+			# TODO change with raise
 			print('Error: robot id is not unique')
 			print('#############################')
 			exit()
@@ -87,6 +88,7 @@ for robot_config in config:
 
 		for act in rob['actuators']:
 			if act['id'] in aes:
+				# TODO change with raise
 				print('Error: actuator id is not unique')
 				print('################################')
 				exit()
@@ -106,8 +108,15 @@ for robot_config in config:
 			robot.add_default_interface(interf['type'])
 			robots.append(rob['id'])
 
+
+# TODO tirare dentro gli oggetti
+num_object = game['game']['numobject']
+
+# TODO add fastmode to config file
 env = Environment('indoors-1/indoor-1', fastmode = False)
 #env = Environment(map_file, fastmode = False)
+
+# TODO add camera to config and/or game config file
 env.set_camera_location([-18.0, -6.7, 10.8])
 env.set_camera_rotation([1.09, 0, -1.14])
 
