@@ -44,7 +44,7 @@ except:
     raise
 
 # TODO se più file si chiamano uguale
-
+# trasformare lista di robot file in set e confrontare la loro lunghezza
 
 # Check if any robot file exists and if we have the right number of robots
 num_robot = game['game']['numrobot']
@@ -111,9 +111,9 @@ fmode = g['game']['fastmode']
 env = Environment('indoors-1/indoor-1', fastmode = fmode)
 #env = Environment(map_file, fastmode = fmode)
 
-# TODO add camera to config and/or game config file
-env.set_camera_location([-18.0, -6.7, 10.8])
-env.set_camera_rotation([1.09, 0, -1.14])
+for cam in game['game']['camera_position']:
+	env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
+	env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
 
 # Add the MORSE mascott, MORSY.
 # Out-the-box available robots are listed here:

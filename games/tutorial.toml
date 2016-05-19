@@ -2,6 +2,13 @@
 	numrobot = 2
 	numobject = 0
 	map = "tutorial"
+	[[game.camera_position]]
+		x_cam = -18.0
+		y_cam = -6.7
+		z_cam = 10.8
+		p_cam = 1.09
+		q_cam = 0
+		r_cam = -1.14
 	[[game.robot_position]]
 		x = 7
 		y = 7
