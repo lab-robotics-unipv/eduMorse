@@ -1,3 +1,4 @@
 [game]
     game = "tutorial"
+    fastmode = false
     robot_file = ["r"]

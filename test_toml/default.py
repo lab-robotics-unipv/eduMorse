@@ -107,9 +107,9 @@ for robot_config in config:
 # TODO tirare dentro gli oggetti
 num_object = game['game']['numobject']
 
-# TODO add fastmode to config file
-env = Environment('indoors-1/indoor-1', fastmode = False)
-#env = Environment(map_file, fastmode = False)
+fmode = g['game']['fastmode']
+env = Environment('indoors-1/indoor-1', fastmode = fmode)
+#env = Environment(map_file, fastmode = fmode)
 
 # TODO add camera to config and/or game config file
 env.set_camera_location([-18.0, -6.7, 10.8])
