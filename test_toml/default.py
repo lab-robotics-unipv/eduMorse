@@ -39,9 +39,9 @@ with open(game_file) as gamefile:
 # Check if map file exists
 map_name = game['game']['map']
 try:
-    map_file = findFile(map_name, 'blend', [PWD, MAPSPATH])
+	map_file = findFile(map_name, 'blend', [PWD, MAPSPATH])
 except:
-    raise
+	raise
 
 # TODO se più file si chiamano uguale
 # trasformare lista di robot file in set e confrontare la loro lunghezza
@@ -108,12 +108,21 @@ for robot_config in config:
 num_object = game['game']['numobject']
 
 fmode = g['game']['fastmode']
-env = Environment('indoors-1/indoor-1', fastmode = fmode)
-#env = Environment(map_file, fastmode = fmode)
+env = Environment(map_file, fastmode = fmode)
 
+# default camera
 for cam in game['game']['camera_position']:
 	env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
 	env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
+
+# second camera
+camera = VideoCamera()
+for cam in g['game']['camera_position']:
+	camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
+	camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
+camera.properties(Vertical_Flip = False)
+robot.append(camera)
+env.select_display_camera(camera)
 
 # Add the MORSE mascott, MORSY.
 # Out-the-box available robots are listed here:
