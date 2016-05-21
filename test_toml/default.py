@@ -12,6 +12,7 @@ import os
 PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
 GAMESPATH = os.environ.get("GAMESPATH")
 MAPSPATH = os.path.join(GAMESPATH, "maps")
+OBJECTSPATH = os.path.join(GAMESPATH, "objects")
 
 # Control if a file exists
 def findFile(filename, extension, paths):
@@ -42,6 +43,20 @@ try:
 	map_file = findFile(map_name, 'blend', [PWD, MAPSPATH])
 except:
 	raise
+
+# Check if any object file exists and if we have the right number of objects
+objects = []
+num_object = game['game']['numobject']
+for o in game['game']['objects']:
+	try:
+		object_file = findFile(o['file'], 'blend', [PWD, OBJECTSPATH])
+	except:
+		raise
+
+	objects.append(o['file'])
+
+if len(objects) > num_object:
+	raise Exception('Too many objects')
 
 # TODO se più file si chiamano uguale
 # trasformare lista di robot file in set e confrontare la loro lunghezza
@@ -103,9 +118,12 @@ for robot_config in config:
 
 		robots.append(rob['id'])
 
-
-# TODO tirare dentro gli oggetti
-num_object = game['game']['numobject']
+# object configuration
+for o in game['game']['objects']:
+	obj = PassiveObject(object_file, o['type'])
+	obj.translate(o['x'], o['y'], o['z'])
+	for prop in o['properties']:
+		obj.properties(Label = prop['label'], GOAL = prop['goal'])
 
 fmode = g['game']['fastmode']
 env = Environment(map_file, fastmode = fmode)

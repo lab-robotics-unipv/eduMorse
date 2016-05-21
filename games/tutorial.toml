@@ -1,7 +1,16 @@
 [game]
 	numrobot = 2
-	numobject = 0
+	numobject = 1
 	map = "tutorial"
+	[[game.objects]]
+		file = "objects"
+		type = "GOAL"
+		x = 7
+		y = 7
+		z = 0.01
+		[[game.objects.properties]]
+			label = "GOAL"
+			goal = true
 	[[game.camera_position]]
 		x_cam = -18.0
 		y_cam = -6.7
