@@ -30,7 +30,8 @@ wget --no-check-certificate -O $FILE.tar.gz $URL
 tar -xvf /tmp/$FILE.tar.gz -C $HOME
 
 # Setting the environment variables
-echo "# EDUMORSE variables" >> ~/.bashrc
-echo "EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
+echo "# EDUMORSE variables" >> $HOME/.bashrc
+echo "export EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
+echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
+echo "export GAMESPATH=$HOME/simulator/games" >> $HOME/.bashrc
 echo "edumorse = $HOME/$FILE" >> $HOME/.morse/config
-echo "PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/"
