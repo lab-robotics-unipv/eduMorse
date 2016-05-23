@@ -58,26 +58,29 @@ for o in game['game']['objects']:
 if len(objects) > num_object:
 	raise Exception('Too many objects')
 
-# TODO se più file si chiamano uguale
-# trasformare lista di robot file in set e confrontare la loro lunghezza
-
 # Check if any robot file exists and if we have the right number of robots
 num_robot = game['game']['numrobot']
 config = []
+robot_list = []
 num = 0
 for r in g['game']['robot_file']:
 	try:
 		robot_file = findFile(r, 'toml', [PWD])
+		robot_list.append(robot_file)
 	except:
 		raise
 
 	with open(robot_file) as rfile:
 		config.append(toml.loads(rfile.read()))
-	for i in config:
-		num += len(i['robot'])
 
-	if num > num_robot:
-		raise Exception('Too many robots')
+for i in config:
+	num += len(i['robot'])
+if num > num_robot:
+	raise Exception('Too many robots')
+
+# check if robot files have the same name
+if len(set(robot_list)) < len(robot_list):
+	raise Exception('Robot files with the same name')
 
 # robot configuration files
 for robot_config in config:
