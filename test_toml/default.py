@@ -91,14 +91,14 @@ for robot_config in config:
 
 		robot = eval(rob['type'] + '()')
 		robot.name = rob['id']
-		x = rob['x']
-		y = rob['y']
-		z = rob['z']
-		p = rob['p']
-		q = rob['q']
-		r = rob['r']
-		robot.translate(x, y, z)
-		robot.rotate(p, q, r)
+#		x = rob['x']
+#		y = rob['y']
+#		z = rob['z']
+#		p = rob['p']
+#		q = rob['q']
+#		r = rob['r']
+#		robot.translate(x, y, z)
+#		robot.rotate(p, q, r)
 		aes = []  #actuators and sensors
 
 		for act in rob['actuators']:
@@ -120,6 +120,10 @@ for robot_config in config:
 			robot.add_default_interface(interf['type'])
 
 		robots.append(rob['id'])
+
+# add robot position from game file
+for pos in game['game']['robot_position']:
+	robot.translate(pos['x'], pos['y'])
 
 # object configuration
 for o in game['game']['objects']:

@@ -1,5 +1,5 @@
 [game]
-	numrobot = 2
+	numrobot = 1
 	numobject = 1
 	map = "tutorial"
 	[[game.objects]]
