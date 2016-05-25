@@ -2,6 +2,8 @@
 
 # Install dependencies
 sudo apt-get install -y cmake
+sudo apt-get install -y cmake-data
+sudo apt-get install -y pkg-config
 sudo apt-get install -y g++
 sudo apt-get install -y blender
 sudo apt-get install -y git
@@ -11,6 +13,7 @@ sudo apt-get install -y python3-dev
 sudo apt-get install -y python3-numpy
 sudo apt-get install -y python3-pip
 
+sudo pip3 install --upgrade pip
 sudo pip3 install pytoml
 
 # Install Morse simlator
