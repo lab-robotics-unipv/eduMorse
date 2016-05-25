@@ -122,13 +122,10 @@ def main():
 			num_object = game['game']['numobject']
 			objects = []
 			for o in game['game']['objects']:
-				object_file = o['file'] + '.blend'
-				if os.path.exists(os.path.join(PWD, object_file)):
-					pass
-				elif os.path.exists(os.path.join(OBJECTSPATH, object_file)):
-					object_file = os.path.join(OBJECTSPATH, object_file)
-				else:
-					raise Exception("Object file doesn't exist")
+				try:
+					object_file = findFileInPath(o['file'], 'blend', [PWD, OBJECTSPATH])
+				except:
+					raise
 				objects.append(o['file'])
 
 			if len(objects) > num_object:
@@ -170,3 +167,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
