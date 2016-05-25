@@ -168,4 +168,5 @@ def main():
 	robot.append(camera)
 	env.select_display_camera(camera)
 
-main()
+if __name__ == "__main__":
+	main()
