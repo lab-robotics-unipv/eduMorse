@@ -60,113 +60,113 @@ def main():
 					raise
 				robot_file_list.append(rf)
 
-		# Open and load any robot file and collect them in a list
-		config = []
-		for robot_file in robot_file_list:
-			with open(os.path.join(PWD, robot_file)) as conffile:
-				config.append(toml.loads(conffile.read()))
+			# Open and load any robot file and collect them in a list
+			config = []
+			for robot_file in robot_file_list:
+				with open(os.path.join(PWD, robot_file)) as conffile:
+					config.append(toml.loads(conffile.read()))
 
-		# Check if the number of robots is higher than the admitted one
-		for c in config:
-			num += len(c['robot'])
-			if num > num_robot:
-				raise Exception('Too many robots')
+			# Check if the number of robots is higher than the admitted one
+			for c in config:
+				num += len(c['robot'])
+				if num > num_robot:
+					raise Exception('Too many robots')
 
-		# Check if the files are used once
-		if len(set(robot_file_list)) < len(robot_file_list):
-			raise Exception('Robot files with the same name')
-
-
-	############################################################
-	# ROBOT CONFIGURATION
-	############################################################
-
-	for robot_config in config:
-		robots = []
-		for rob in robot_config['robot']:
-			if rob['id'] in robots:
-				raise Exception('Robot id is not unique')
-
-			robot = eval(rob['type'] + '()')
-			robot.name = rob['id']
-			aes = []  #actuators and sensors
-
-			for act in rob['actuators']:
-				if act['id'] in aes:
-					raise Exception('Error: actuator id is not unique')
-				actuator = eval(act['type'] + '()')
-				actuator.name = act['id']
-				robot.append(actuator)
-				aes.append(act['id'])
-
-			for sens in rob['sensors']:
-				sensor = eval(sens['type'] + '()')
-				sensor.name = sens['id']
-				sensor.properties(**sens['properties'])
-				robot.append(sensor)
-				aes.append(sens['id'])
-
-			for interf in rob['interface']:
-				robot.add_default_interface(interf['type'])
-
-			robots.append(rob['id'])
-
-	for pos in game['game']['robot_position']:
-		robot.translate(pos['x'], pos['y'])
+			# Check if the files are used once
+			if len(set(robot_file_list)) < len(robot_file_list):
+				raise Exception('Robot files with the same name')
 
 
-	############################################################
-	# OBJECT CONFIGURATION
-	############################################################
+			############################################################
+			# ROBOT CONFIGURATION
+			############################################################
 
-	num_object = game['game']['numobject']
-	objects = []
-	for o in game['game']['objects']:
-		object_file = o['file'] + '.blend'
-		if os.path.exists(os.path.join(PWD, object_file)):
-			pass
-		elif os.path.exists(os.path.join(OBJECTSPATH, object_file)):
-			object_file = os.path.join(OBJECTSPATH, object_file)
-		else:
-			raise Exception("Object file doesn't exist")
-		objects.append(o['file'])
+			for robot_config in config:
+				robots = []
+				for rob in robot_config['robot']:
+					if rob['id'] in robots:
+						raise Exception('Robot id is not unique')
 
-	if len(objects) > num_object:
-		raise Exception('Too many objects')
+					robot = eval(rob['type'] + '()')
+					robot.name = rob['id']
+					aes = []  #actuators and sensors
 
-	for o in game['game']['objects']:
-		obj = PassiveObject(object_file, o['type'])
-		obj.translate(o['x'], o['y'], o['z'])
-		for prop in o['properties']:
-			obj.properties(Label = prop['label'], GOAL = prop['goal'])
+					for act in rob['actuators']:
+						if act['id'] in aes:
+							raise Exception('Error: actuator id is not unique')
+						actuator = eval(act['type'] + '()')
+						actuator.name = act['id']
+						robot.append(actuator)
+						aes.append(act['id'])
+
+					for sens in rob['sensors']:
+						sensor = eval(sens['type'] + '()')
+						sensor.name = sens['id']
+						sensor.properties(**sens['properties'])
+						robot.append(sensor)
+						aes.append(sens['id'])
+
+					for interf in rob['interface']:
+						robot.add_default_interface(interf['type'])
+
+					robots.append(rob['id'])
+
+			for pos in game['game']['robot_position']:
+				robot.translate(pos['x'], pos['y'])
 
 
-	############################################################
-	# ENVIRONMENT CONFIGURATION
-	############################################################
+			############################################################
+			# OBJECT CONFIGURATION
+			############################################################
 
-	# Check if map file exists
-	game_map = game['game']['map']
-	try:
-		game_map = findFileInPath(game_map, 'blend', [PWD, MAPSPATH])
-	except:
-		raise
+			num_object = game['game']['numobject']
+			objects = []
+			for o in game['game']['objects']:
+				object_file = o['file'] + '.blend'
+				if os.path.exists(os.path.join(PWD, object_file)):
+					pass
+				elif os.path.exists(os.path.join(OBJECTSPATH, object_file)):
+					object_file = os.path.join(OBJECTSPATH, object_file)
+				else:
+					raise Exception("Object file doesn't exist")
+				objects.append(o['file'])
 
-	fmode = simulation['game']['fastmode']
+			if len(objects) > num_object:
+				raise Exception('Too many objects')
 
-	env = Environment(game_map, fastmode = fmode)
+			for o in game['game']['objects']:
+				obj = PassiveObject(object_file, o['type'])
+				obj.translate(o['x'], o['y'], o['z'])
+				for prop in o['properties']:
+					obj.properties(Label = prop['label'], GOAL = prop['goal'])
 
-	for cam in game['game']['camera_position']:
-		env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
-		env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
 
-	camera = VideoCamera()
-	for cam in simulation['game']['camera_position']:
-		camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
-		camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
-	camera.properties(Vertical_Flip=False)
-	robot.append(camera)
-	env.select_display_camera(camera)
+			############################################################
+			# ENVIRONMENT CONFIGURATION
+			############################################################
+
+			# Check if map file exists
+			game_map = game['game']['map']
+			try:
+				game_map = findFileInPath(game_map, 'blend', [PWD, MAPSPATH])
+			except:
+				raise
+
+			fmode = simulation['game']['fastmode']
+
+			env = Environment(game_map, fastmode = fmode)
+
+			for cam in game['game']['camera_position']:
+				env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
+				env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
+
+			camera = VideoCamera()
+			for cam in simulation['game']['camera_position']:
+				camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
+				camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
+			camera.properties(Vertical_Flip=False)
+			robot.append(camera)
+			env.select_display_camera(camera)
 
 if __name__ == "__main__":
 	main()
