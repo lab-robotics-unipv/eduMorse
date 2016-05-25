@@ -1,0 +1,11 @@
+[game]
+	name = "tutorial"
+	robot_file = ["r"]
+	fastmode = false
+	[[game.camera_position]]
+		x_cam = 0.5
+		y_cam = 0
+		z_cam = 0.6
+		p_cam = 0
+		q_cam = 0
+		r_cam = 3.14
