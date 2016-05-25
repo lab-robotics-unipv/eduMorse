@@ -1,30 +1,43 @@
 #!/bin/bash
 
+# Install dependencies
 sudo apt-get install -y cmake
+sudo apt-get install -y cmake-data
+sudo apt-get install -y pkg-config
+sudo apt-get install -y g++
+sudo apt-get install -y blender
+sudo apt-get install -y git
+
 sudo apt-get install -y python3
 sudo apt-get install -y python3-dev
-sudo apt-get install -y blender
 sudo apt-get install -y python3-numpy
+sudo apt-get install -y python3-pip
+
+sudo pip3 install --upgrade pip
+sudo pip3 install pytoml
+
+# Install Morse simlator
 cd /tmp
-sudo apt-get install -y git
 git clone https://github.com/morse-simulator/morse.git
 cd morse
 mkdir build && cd build
-sudo apt-get install -y g++
 cmake ..
 sudo make install
 morse check
-sudo apt-get install -y python3-pip
-sudo pip3 install pytoml
 
-FILE=eduMorse.tar.gz
-URL="https://robolab.unipv.it/owncloud/index.php/s/pBLtYXr8e6HWLbU/download"
-
+# Retrieving the custom simulation files
 cd /tmp
-wget --no-check-certificate -O $FILE $URL
+FILE=eduMorse
+URL="https://robolab.unipv.it/owncloud/index.php/s/pBLtYXr8e6HWLbU/download"
+wget --no-check-certificate -O $FILE.tar.gz $URL
+tar -xvf /tmp/$FILE.tar.gz -C $HOME
 
-tar -xvf /tmp/$FILE -C $HOME
+# Setting the environment variables
+echo "# EDUMORSE variables" >> $HOME/.bashrc
+echo "export EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
+echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
+echo "export GAMESPATH=$HOME/simulator/games" >> $HOME/.bashrc
 
-echo "source ~/simulator/environ.sh" >> ~/.bashrc
-echo "EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
+mkdir $HOME/.morse
+echo "[sites]" > $HOME/.morse/config
 echo "edumorse = $HOME/$FILE" >> $HOME/.morse/config
