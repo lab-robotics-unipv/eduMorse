@@ -88,22 +88,28 @@ def main():
 					for act in rob['actuators']:
 						if act['id'] in aes:
 							raise Exception('Error: actuator id is not unique')
-						actuator = eval(act['type'] + '()')
-						actuator.name = act['id']
-						p = act.get('properties', None)
-						if p:
-							actuator.properties(**p)
-						robot.append(actuator)
-						aes.append(act['id'])
+						if act['type'] in game['game']['actuators']:
+							actuator = eval(act['type'] + '()')
+							actuator.name = act['id']
+							p = act.get('properties', None)
+							if p:
+								actuator.properties(**p)
+							robot.append(actuator)
+							aes.append(act['id'])
+						else:
+							raise Exception('Actuator type not allowed in this game')
 
 					for sens in rob['sensors']:
-						sensor = eval(sens['type'] + '()')
-						sensor.name = sens['id']
-						p = sens.get('properties', None)
-						if p:
-							sensor.properties(**p)
-						robot.append(sensor)
-						aes.append(sens['id'])
+						if sens['type'] in game['game']['sensors']:
+							sensor = eval(sens['type'] + '()')
+							sensor.name = sens['id']
+							p = sens.get('properties', None)
+							if p:
+								sensor.properties(**p)
+							robot.append(sensor)
+							aes.append(sens['id'])
+						else:
+							raise Exception('Sensor type not allowed in this game')
 
 					for interf in rob['interface']:
 						robot.add_default_interface(interf['type'])
