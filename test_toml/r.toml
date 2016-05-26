@@ -6,14 +6,13 @@
 	[[robot.actuators]]
 		id = 'motion2'
 		type = 'MotionVW'
-	[[robot.sensors]]
+	[[robot.actuators]]
 		id = 'keyboard'
 		type = 'Keyboard'
-		[robot.sensors.properties]
+		[robot.actuators.properties]
 			ControlType = 'Position'
 	[[robot.sensors]]
 		id = 'pose'
 		type = 'Pose'
-		[robot.sensors.properties]
 	[[robot.interface]]
 		type = 'socket'

@@ -90,13 +90,18 @@ def main():
 							raise Exception('Error: actuator id is not unique')
 						actuator = eval(act['type'] + '()')
 						actuator.name = act['id']
+						p = act.get('properties', None)
+						if p:
+							actuator.properties(**p)
 						robot.append(actuator)
 						aes.append(act['id'])
 
 					for sens in rob['sensors']:
 						sensor = eval(sens['type'] + '()')
 						sensor.name = sens['id']
-						sensor.properties(**sens['properties'])
+						p = sens.get('properties', None)
+						if p:
+							sensor.properties(**p)
 						robot.append(sensor)
 						aes.append(sens['id'])
 
