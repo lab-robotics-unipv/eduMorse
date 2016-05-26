@@ -52,29 +52,26 @@ def main():
 			# Control if any robot file exists and collect them in a list
 			num_robot = game['game']['numrobot']
 			robot_file_list = []
-			num = 0
-			for robot_file in simulation['game']['robot_file']:
+			for robot_file in simulation['game']['robot']:
 				try:
-					rf = findFileInPath(robot_file, 'toml', [PWD, ROBOTSPATH])
+					rf = findFileInPath(robot_file['file'], 'toml', [PWD, ROBOTSPATH])
 				except:
 					raise
-				robot_file_list.append(rf)
+				robot_file_list.append((robot_file['name'], rf))
 
 			# Open and load any robot file and collect them in a list
 			config = []
 			for robot_file in robot_file_list:
-				with open(os.path.join(PWD, robot_file)) as conffile:
-					config.append(toml.loads(conffile.read()))
+				with open(robot_file[1]) as conffile:
+					config.append((robot_file[0], toml.loads(conffile.read())))
 
 			# Check if the number of robots is higher than the admitted one
-			for c in config:
-				num += len(c['robot'])
-				if num > num_robot:
-					raise Exception('Too many robots')
+			if len(config) > num_robot:
+				raise Exception('Too many robots')
 
-			# Check if the files are used once
-			if len(set(robot_file_list)) < len(robot_file_list):
-				raise Exception('Robot files with the same name')
+			# Check if the robots are used once
+			if len(set([name[0] for name in robot_file_list])) < len([name[0] for name in robot_file_list]):
+				raise Exception('Robots with the same name')
 
 
 			############################################################
@@ -83,12 +80,9 @@ def main():
 
 			for robot_config in config:
 				robots = []
-				for rob in robot_config['robot']:
-					if rob['id'] in robots:
-						raise Exception('Robot id is not unique')
-
+				for rob in robot_config[1]['robot']:
 					robot = eval(rob['type'] + '()')
-					robot.name = rob['id']
+					robot.name = robot_config[0]
 					aes = []  #actuators and sensors
 
 					for act in rob['actuators']:
@@ -109,7 +103,7 @@ def main():
 					for interf in rob['interface']:
 						robot.add_default_interface(interf['type'])
 
-					robots.append(rob['id'])
+					robots.append(robot_config[0])
 
 			for pos in game['game']['robot_position']:
 				robot.translate(pos['x'], pos['y'])
