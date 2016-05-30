@@ -1,12 +1,6 @@
-# vim: set filetype=python:
-
 env = Environment()
-env.Append(CPPPATH='#/include')
+env['CFLAGS'] = '-ggdb3'
 
-env.VariantDir('obj', 'src')
-env.SConscript('obj/SConscript')
-
-t = env.Program('main', Glob('obj/*.o') , LIBS=['m'])
-
-env.NoClean('main')
-env.Clean(t, Glob('obj/*'))
+sourceFile = Glob('*.c')
+staticLib = env.StaticLibrary(target='cBindings', source=sourceFile)
+env.NoClean(staticLib)

@@ -1,0 +1,9 @@
+# vim: set filetype=python:
+
+env = Environment()
+env.Append(LIBPATH='./cBindings')
+env.Append(CPPPATH='./cBindings')
+
+t = env.Program('main', 'main.c', LIBS=['cBindings', 'm'])
+
+env.NoClean('main')
