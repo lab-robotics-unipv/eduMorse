@@ -30,16 +30,18 @@ morse check
 
 # Retrieving the custom simulation files
 cd /tmp
-FILE=eduMorse
-URL="https://robolab.unipv.it/owncloud/index.php/s/pBLtYXr8e6HWLbU/download"
+FILE=MORSELAB
+URL="https://robolab.unipv.it/owncloud/index.php/s/d3R2lE5RsxQYnPv"
 wget --no-check-certificate -O $FILE.tar.gz $URL
-tar -xvf /tmp/$FILE.tar.gz -C $HOME
+sudo tar -xvf /tmp/$FILE.tar.gz -C /opt
+cd /opt/morseLab/libraries/cBindings
+scons
+scons -c
 
 # Setting the environment variables
-echo "# EDUMORSE variables" >> $HOME/.bashrc
-echo "export EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
+echo "# MORSELAB variables" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export MORSELABPATH=$HOME/simulator/morseLab/" >> $HOME/.bashrc
+echo "export MORSELABPATH=/opt/morseLab" >> $HOME/.bashrc
 
 mkdir $HOME/.morse
 echo "[sites]" > $HOME/.morse/config
