@@ -5,6 +5,9 @@ sudo apt-get install -y cmake
 sudo apt-get install -y cmake-data
 sudo apt-get install -y pkg-config
 sudo apt-get install -y g++
+sudo apt-get install -y scons
+sudo apt-get install -y openjdk-7-jre-headless
+sudo apt-get install -y openjdk-7-jdk
 sudo apt-get install -y blender
 sudo apt-get install -y git
 
@@ -36,7 +39,7 @@ tar -xvf /tmp/$FILE.tar.gz -C $HOME
 echo "# EDUMORSE variables" >> $HOME/.bashrc
 echo "export EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export GAMESPATH=$HOME/simulator/games" >> $HOME/.bashrc
+echo "export MORSELABPATH=$HOME/simulator/morseLab/" >> $HOME/.bashrc
 
 mkdir $HOME/.morse
 echo "[sites]" > $HOME/.morse/config

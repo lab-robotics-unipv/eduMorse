@@ -25,7 +25,8 @@ def main():
 	############################################################
 
 	PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
-	GAMESPATH = os.environ.get("GAMESPATH")
+	MORSELABPATH = os.environ.get("MORSELABPATH")
+	GAMESPATH = os.path.join(MORSELABPATH, "games")
 	MAPSPATH = os.path.join(GAMESPATH, "maps")
 	OBJECTSPATH = os.path.join(GAMESPATH, "objects")
 	ROBOTSPATH = os.path.join(GAMESPATH, "robots")
