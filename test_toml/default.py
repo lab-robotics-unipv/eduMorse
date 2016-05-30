@@ -79,42 +79,39 @@ def main():
 			############################################################
 
 			for robot_config in config:
-				robots = []
-				for rob in robot_config[1]['robot']:
-					robot = eval(rob['type'] + '()')
-					robot.name = robot_config[0]
-					aes = []  #actuators and sensors
+				rob = robot_config[1]['robot']
+				robot = eval(rob['type'] + '()')
+				robot.name = robot_config[0]
+				aes = []  #actuators and sensors
 
-					for act in rob['actuators']:
-						if act['id'] in aes:
-							raise Exception('Error: actuator id is not unique')
-						if act['type'] in game['game']['actuators']:
-							actuator = eval(act['type'] + '()')
-							actuator.name = act['id']
-							p = act.get('properties', None)
-							if p:
-								actuator.properties(**p)
-							robot.append(actuator)
-							aes.append(act['id'])
-						else:
-							raise Exception('Actuator type not allowed in this game')
+				for act in rob['actuators']:
+					if act['id'] in aes:
+						raise Exception('Error: actuator id is not unique')
+					if act['type'] in game['game']['actuators']:
+						actuator = eval(act['type'] + '()')
+						actuator.name = act['id']
+						p = act.get('properties', None)
+						if p:
+							actuator.properties(**p)
+						robot.append(actuator)
+						aes.append(act['id'])
+					else:
+						raise Exception('Actuator type not allowed in this game')
 
-					for sens in rob['sensors']:
-						if sens['type'] in game['game']['sensors']:
-							sensor = eval(sens['type'] + '()')
-							sensor.name = sens['id']
-							p = sens.get('properties', None)
-							if p:
-								sensor.properties(**p)
-							robot.append(sensor)
-							aes.append(sens['id'])
-						else:
-							raise Exception('Sensor type not allowed in this game')
+				for sens in rob['sensors']:
+					if sens['type'] in game['game']['sensors']:
+						sensor = eval(sens['type'] + '()')
+						sensor.name = sens['id']
+						p = sens.get('properties', None)
+						if p:
+							sensor.properties(**p)
+						robot.append(sensor)
+						aes.append(sens['id'])
+					else:
+						raise Exception('Sensor type not allowed in this game')
 
-					for interf in rob['interface']:
-						robot.add_default_interface(interf['type'])
-
-					robots.append(robot_config[0])
+				for interf in rob['interface']:
+					robot.add_default_interface(interf['type'])
 
 			for pos in game['game']['robot_position']:
 				robot.translate(pos['x'], pos['y'])

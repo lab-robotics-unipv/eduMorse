@@ -1,4 +1,4 @@
-[[robot]]
+[robot]
 	type = 'ATRV'
 	[[robot.actuators]]
 		id = 'motion1'
