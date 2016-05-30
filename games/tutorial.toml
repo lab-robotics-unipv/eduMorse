@@ -2,6 +2,8 @@
 	numrobot = 1
 	numobject = 1
 	map = "tutorial"
+	actuators = ["MotionVW", "Keyboard"]
+	sensors = ["Pose"]
 	[[game.objects]]
 		file = "objects"
 		type = "GOAL"
@@ -21,4 +23,3 @@
 	[[game.robot_position]]
 		x = 7
 		y = 7
-	

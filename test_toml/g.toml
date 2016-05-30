@@ -1,7 +1,9 @@
 [game]
 	name = "tutorial"
-	robot_file = ["r"]
 	fastmode = false
+	[[game.robot]]
+		file = "r"
+		name = "robot"
 	[[game.camera_position]]
 		x_cam = 0.5
 		y_cam = 0

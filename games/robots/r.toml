@@ -1,0 +1,18 @@
+[robot]
+	type = 'ATRV'
+	[[robot.actuators]]
+		id = 'motion1'
+		type = 'MotionVW'
+	[[robot.actuators]]
+		id = 'motion2'
+		type = 'MotionVW'
+	[[robot.actuators]]
+		id = 'keyboard'
+		type = 'Keyboard'
+		[robot.actuators.properties]
+			ControlType = 'Position'
+	[[robot.sensors]]
+		id = 'pose'
+		type = 'Pose'
+	[[robot.interface]]
+		type = 'socket'
