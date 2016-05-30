@@ -6,6 +6,8 @@ sudo apt-get install -y cmake-data
 sudo apt-get install -y pkg-config
 sudo apt-get install -y g++
 sudo apt-get install -y scons
+sudo apt-get install -y openjdk-7-jre-headless
+sudo apt-get install -y openjdk-7-jdk
 sudo apt-get install -y blender
 sudo apt-get install -y git
 
