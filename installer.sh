@@ -37,7 +37,7 @@ tar -xvf /tmp/$FILE.tar.gz -C $HOME
 echo "# EDUMORSE variables" >> $HOME/.bashrc
 echo "export EDUMORSEPATH=$HOME/$FILE" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export GAMESPATH=$HOME/simulator/games" >> $HOME/.bashrc
+echo "export MORSELABPATH=$HOME/simulator/morseLab/" >> $HOME/.bashrc
 
 mkdir $HOME/.morse
 echo "[sites]" > $HOME/.morse/config

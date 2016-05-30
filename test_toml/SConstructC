@@ -1,8 +1,11 @@
 # vim: set filetype=python:
+import os
 
 env = Environment()
-env.Append(LIBPATH='./cBindings')
-env.Append(CPPPATH='./cBindings')
+MORSELABPATH = os.environ.get("MORSELABPATH")
+CBINDINGSPATH = os.path.join(MORSELABPATH, "libraries/cBindings")
+env.Append(LIBPATH=CBINDINGSPATH)
+env.Append(CPPPATH=CBINDINGSPATH)
 
 t = env.Program('main', 'main.c', LIBS=['cBindings', 'm'])
 
