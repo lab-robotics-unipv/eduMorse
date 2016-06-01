@@ -43,7 +43,6 @@ def main():
 		game_name = simulation['game']['name']
 		try:
 			game_name = findFileInPath(game_name, 'toml', [PWD, GAMESPATH])
-			print(game_name)
 		except:
 			raise
 
@@ -97,6 +96,13 @@ def main():
 						p = act.get('properties', None)
 						if p:
 							actuator.properties(**p)
+						i = act.get('interface', None)
+						if i:
+							iprop = i.get('properties', None)
+							it = i['type']
+							if iprop:
+								actuator.add_interface(it, **iprop)
+							actuator.add_interface(it)
 						robot.append(actuator)
 						aes.append(act['id'])
 					else:
