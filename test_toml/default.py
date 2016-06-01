@@ -43,6 +43,7 @@ def main():
 		game_name = simulation['game']['name']
 		try:
 			game_name = findFileInPath(game_name, 'toml', [PWD, GAMESPATH])
+			print(game_name)
 		except:
 			raise
 
@@ -79,6 +80,8 @@ def main():
 			# ROBOT CONFIGURATION
 			############################################################
 
+			positions = list(game['game']['robot_position'])
+
 			for robot_config in config:
 				rob = robot_config[1]['robot']
 				robot = eval(rob['type'] + '()')
@@ -111,11 +114,12 @@ def main():
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				for interf in rob['interface']:
-					robot.add_default_interface(interf['type'])
-
-			for pos in game['game']['robot_position']:
+				pos = positions.pop()
 				robot.translate(pos['x'], pos['y'])
+				robot.rotate()
+
+				#for interf in rob['interface']:
+					#robot.add_default_interface(interf['type'])
 
 
 			############################################################
