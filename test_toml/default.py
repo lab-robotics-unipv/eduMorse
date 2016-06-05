@@ -99,10 +99,10 @@ def main():
 						i = act.get('interface', None)
 						if i:
 							iprop = i.get('properties', None)
-							it = i['type']
+							itype = i['type']
 							if iprop:
-								actuator.add_interface(it, **iprop)
-							actuator.add_interface(it)
+								actuator.add_interface(itype, **iprop)
+							actuator.add_interface(itype)
 						robot.append(actuator)
 						aes.append(act['id'])
 					else:
@@ -115,6 +115,13 @@ def main():
 						p = sens.get('properties', None)
 						if p:
 							sensor.properties(**p)
+						i = sens.get('interface', None)
+						if i:
+							iprop = i.get('properties', None)
+							itype = i['type']
+							if iprop:
+								sensor.add_interface(itype, **iprop)
+							sensor.add_interface(itype)
 						robot.append(sensor)
 						aes.append(sens['id'])
 					else:
@@ -123,9 +130,6 @@ def main():
 				pos = positions.pop()
 				robot.translate(pos['x'], pos['y'])
 				robot.rotate()
-
-				#for interf in rob['interface']:
-					#robot.add_default_interface(interf['type'])
 
 
 			############################################################
