@@ -79,6 +79,8 @@ def main():
 			# ROBOT CONFIGURATION
 			############################################################
 
+			positions = list(game['game']['robot_position'])
+
 			for robot_config in config:
 				rob = robot_config[1]['robot']
 				robot = eval(rob['type'] + '()')
@@ -94,6 +96,13 @@ def main():
 						p = act.get('properties', None)
 						if p:
 							actuator.properties(**p)
+						i = act.get('interface', None)
+						if i:
+							iprop = i.get('properties', None)
+							itype = i['type']
+							if iprop:
+								actuator.add_interface(itype, **iprop)
+							actuator.add_interface(itype)
 						robot.append(actuator)
 						aes.append(act['id'])
 					else:
@@ -106,16 +115,21 @@ def main():
 						p = sens.get('properties', None)
 						if p:
 							sensor.properties(**p)
+						i = sens.get('interface', None)
+						if i:
+							iprop = i.get('properties', None)
+							itype = i['type']
+							if iprop:
+								sensor.add_interface(itype, **iprop)
+							sensor.add_interface(itype)
 						robot.append(sensor)
 						aes.append(sens['id'])
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				for interf in rob['interface']:
-					robot.add_default_interface(interf['type'])
-
-			for pos in game['game']['robot_position']:
+				pos = positions.pop()
 				robot.translate(pos['x'], pos['y'])
+				robot.rotate()
 
 
 			############################################################

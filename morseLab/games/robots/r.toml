@@ -3,16 +3,24 @@
 	[[robot.actuators]]
 		id = 'motion1'
 		type = 'MotionVW'
+		[robot.actuators.interface]
+			type = 'socket'
 	[[robot.actuators]]
 		id = 'motion2'
 		type = 'MotionVW'
+		[robot.actuators.interface]
+			type = 'socket'
+#			[robot.actuators.interface.properties]
+#				topic = 'topic'
 	[[robot.actuators]]
 		id = 'keyboard'
 		type = 'Keyboard'
+		[robot.actuators.interface]
+			type = 'socket'
 		[robot.actuators.properties]
 			ControlType = 'Position'
 	[[robot.sensors]]
 		id = 'pose'
 		type = 'Pose'
-	[[robot.interface]]
-		type = 'socket'
+		[robot.sensors.interface]
+			type = 'socket'
