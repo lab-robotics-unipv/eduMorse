@@ -1,8 +1,8 @@
+import pymorse
 import socket
 import threading
 import time
-import pymorse
-
+import sys
 
 class threadDelay (threading.Thread):
 
@@ -13,9 +13,9 @@ class threadDelay (threading.Thread):
 		self.robot = robot
 
 	def run(self):
-		print("I'll be waiting")
-		self.robots[self.robot] = True
+		print("I'll be waiting: " + self.robot)
 		time.sleep(self.delay)
+		self.robots[self.robot]['flag'] = True
 
 
 class threadMessage (threading.Thread):
@@ -24,14 +24,25 @@ class threadMessage (threading.Thread):
 		threading.Thread.__init__(self)
 		self.robots = robots
 		self.robot = robot
+		self.mustRun = True
 
 	def run(self):
-		while (True):
+		while (self.mustRun):
 			data = self.robots[self.robot]['socket'].recv(1024)
 			stringa = data.decode('utf-8').split('/')
+			print('######')
+			print(stringa)
+			print(self.robot)
+			print('######')
+			#import pdb; pdb.set_trace()
+			if len(stringa)!=3 or stringa[1] not in self.robots.keys():
+				continue
 			receiver = robots[stringa[1]]
 			receiver['mutex'].acquire() # mutex of receiver
 			try:
+				robots[self.robot]['flag'] = False
+				t = threadDelay(1, robots, self.robot)
+				t.start()
 				receiver['socket'].sendall(stringa[2].encode('utf-8'))
 			finally:
 				receiver['mutex'].release() # mutex of receiver
@@ -52,55 +63,31 @@ class threadSocket (threading.Thread):
 
 HOST = ''
 PORT = 4001
-thread_list = []
 with pymorse.Morse() as simu:
 	robots = {}
 	for x in simu.robots:
 		robots[x] = {}
-		robots[x]['flag'] = True
-		robots[x]['mutex'] = threading.Lock()
+		robots[x]['timestamp'] = 0
 try:
-	for x in robots.keys():
+	i = 0
+	while i < len(robots.keys):
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.bind((HOST, PORT))
 		s.listen(1)
-		t = threadSocket(robots, x, s)
-		thread_list.append(t)
-		t.start()
-		PORT = PORT + 1
-	for t in thread_list:
-		t.join()
+		conn, addr = socket.accept()
+		data = conn.recv(1024)
+		robot = data.decode('utf-8')
+		if robot in robots.keys():
+			robots[robot]['socket'] = conn
+			i = i + 1
 except:
 	raise
 
-thread_list2 = []
-for x in robots.keys():
-	t = threadMessage(robots, x)
-	t.append(thread_list2)
-	t.start()
+try:
+	while True:
+		time.delay(1)
+except (KeyboardInterrupt, SystemExit):
+	for x in robots.keys():
+		robots[x]['socket'].close()
 
-for t in thread_list2:
-	t.join()
-
-PORT = 50007
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-	s.bind((HOST, PORT))
-	s.listen(1)
-	conn, addr = s.accept()
-	print('Got connection from', addr)
-	while (True):
-		data = conn.recv(1024)
-		if not data:
-			continue
-		stringa = data.decode('utf-8').split('/')
-		if stringa[0] != stringa[1]:
-			try:
-				robots[stringa[1]]['socket'].sendall(stringa[2].encode('utf-8'))
-				robots[stringa[0]] = False
-				t = threadDelay(1, robots, stringa[0])
-				t.start()
-			except:
-				raise
-		else:
-			print('Same robot used')
-	s.close()
+	sys.exit(0)
