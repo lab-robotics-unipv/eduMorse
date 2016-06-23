@@ -1,7 +1,7 @@
 import socket
 
-robot_sender = b'robot'
-robot_receiver = b'robot2'
+robot_sender = b'robot2'
+robot_receiver = b'robot'
 HOST = 'localhost'
 PORT = 4001
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -13,6 +13,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	print(start)
 
 	s.sendall(robot_receiver + b'{ciao}')
-	# manca recv
+	data = s.recv(1024)
+	print(data.decode('utf-8'))
 
 	s.close()
