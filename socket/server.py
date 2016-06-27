@@ -2,6 +2,7 @@ import pymorse
 import select
 import socket
 import sys
+import time
 
 HOST = ''
 PORT = 4001
@@ -9,9 +10,10 @@ with pymorse.Morse() as simu:
 	robots = {}
 	for x in simu.robots:
 		robots[x] = {}
-		robots[x]['timestamp'] = 0
 		robots[x]['flag'] = False
+
 try:
+	address = {}
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((HOST, PORT))
 	s.listen(1)
@@ -26,6 +28,9 @@ try:
 
 		robots[robot]['conn'] = conn
 		robots[robot]['flag'] = True
+		address[addr] = {}
+		address[addr]['robot'] = robot
+		address[addr]['timestamp'] = 0
 		i = i + 1
 
 except KeyError:
@@ -45,7 +50,7 @@ except ValueError:
 
 for x in robots.keys():
 	conn = robots[x]['conn']
-	conn.sendall(b'Start')
+	conn.sendall(b'Start\x04')
 print('Start send')
 
 try:
@@ -53,14 +58,18 @@ try:
 		read_list, _, _ = select.select([robots[x]['conn'] for x in robots.keys()], [], [])
 		for x in read_list:
 			data = x.recv(1024)
-			messaggio = data.decode('utf-8')
-			receiver = messaggio.find('{')
-			if receiver <= 0 or receiver == len(messaggio) - 1 or messaggio[-1] != '}':
+			timestamp = time.time()
+			message = data.decode('utf-8')
+			bracket = message.find('{')
+			if bracket <= 0 or bracket == len(message) - 1 or message[-1] != '}':
 				continue
-			stringa = [messaggio[:receiver], messaggio[receiver:]]
+			stringa = [message[:bracket], message[bracket:]]
 			if stringa[0] not in robots.keys():
 				continue
+			if timestamp <= address[x.getpeername()]['timestamp']:
+				continue
 			print(stringa)
+			address[x.getpeername()]['timestamp'] = timestamp
 			robots[stringa[0]]['conn'].sendall(stringa[1].encode('utf-8'))
 except (KeyboardInterrupt, SystemExit):
 	for x in robots.keys():
