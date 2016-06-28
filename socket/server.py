@@ -5,14 +5,18 @@ import sys
 import time
 
 def receive(conn):
-	data = ''
-	word = ''
+	data = b''
+	word = b''
 	while word != b'\x04':
-		word = conn.recv(1)
 		data += word
-	data = data.decode('utf-8')
-	message = data.split('\x04')
-	return message[0]
+		word = conn.recv(1)
+	message = data.decode('utf-8')
+	return message
+
+
+def send(stringa, robots):
+	message = stringa[1] + '\x04'
+	robots[stringa[0]]['conn'].sendall(message.encode('utf-8'))
 
 
 def checkString(message, robots):
@@ -23,6 +27,14 @@ def checkString(message, robots):
 	if stringa[0] not in robots.keys():
 		return None
 	return stringa
+
+
+def checkTimestamp(address, conn):
+	timestamp = time.time()
+	if timestamp <= address[conn.getpeername()]['timestamp']:
+		return None
+	address[conn.getpeername()]['timestamp'] = timestamp
+	return 0
 
 
 HOST = ''
@@ -42,8 +54,7 @@ if __name__ == '__main__':
 		i = 0
 		while i < len(robots.keys()):
 			conn, addr = s.accept()
-			data = conn.recv(1024)
-			robot = data.decode('utf-8')
+			robot = receive(conn)
 
 			if robots[robot]['flag']:
 				raise ValueError
@@ -72,31 +83,21 @@ if __name__ == '__main__':
 
 	for x in robots.keys():
 		conn = robots[x]['conn']
-		conn.sendall(b'Start\x04')
+		start = [x, 'Start']
+		send(start, robots)
 	print('Start send')
 
 	try:
 		while True:
 			read_list, _, _ = select.select([robots[x]['conn'] for x in robots.keys()], [], [])
 			for x in read_list:
-				#data = x.recv(1024)
 				message = receive(x)
-				timestamp = time.time()
-				stringa = checkString(message)
+				stringa = checkString(message, robots)
 				if stringa == None:
 					continue
-				#message = data.decode('utf-8')
-				#bracket = message.find('{')
-				#if bracket <= 0 or bracket == len(message) - 1 or message[-1] != '}':
-				#	continue
-				#stringa = [message[:bracket], message[bracket:]]
-				#if stringa[0] not in robots.keys():
-				#	continue
-				if timestamp <= address[x.getpeername()]['timestamp']:
+				if checkTimestamp(address, x) == None:
 					continue
-				print(stringa)
-				address[x.getpeername()]['timestamp'] = timestamp
-				robots[stringa[0]]['conn'].sendall(stringa[1].encode('utf-8'))
+				send(stringa, robots)
 	except (KeyboardInterrupt, SystemExit):
 		s.close()
 		for x in robots.keys():
