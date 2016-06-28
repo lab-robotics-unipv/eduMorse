@@ -14,10 +14,9 @@ def receive(conn):
 	return message
 
 
-def send(stringa, robots):
-	message = stringa[1] + '\x04'
-	robots[stringa[0]]['conn'].sendall(message.encode('utf-8'))
-
+def send(stringa, socket):
+	message = stringa + '\x04'
+	socket.sendall(message.encode('utf-8'))
 
 def checkString(message, robots):
 	bracket = message.find('{')
@@ -82,9 +81,7 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 	for x in robots.keys():
-		conn = robots[x]['conn']
-		start = [x, 'Start']
-		send(start, robots)
+		send('Start', robots[x]['conn'])
 	print('Start send')
 
 	try:
@@ -97,7 +94,7 @@ if __name__ == '__main__':
 					continue
 				if checkTimestamp(address, x) == None:
 					continue
-				send(stringa, robots)
+				send(stringa[1], robots[stringa[0]]['conn'])
 	except (KeyboardInterrupt, SystemExit):
 		s.close()
 		for x in robots.keys():

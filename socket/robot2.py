@@ -13,7 +13,7 @@ def receive(conn):
 
 def send(stringa, socket):
 	message = stringa + '\x04'
-	s.sendall(message.encode('utf-8'))
+	socket.sendall(message.encode('utf-8'))
 
 
 def messageInSocket(s):
