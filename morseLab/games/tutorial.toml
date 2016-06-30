@@ -23,3 +23,7 @@
 	[[game.robot_position]]
 		x = 7
 		y = 7
+	[[game.time]]
+		timeSimu = 30
+		scoreZero = true
+		endTime = false
