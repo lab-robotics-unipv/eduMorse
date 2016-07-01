@@ -65,13 +65,17 @@ if __name__ == '__main__':
 		timeSimu = strToInt(sys.argv[1])
 		endTime = strToBool(sys.argv[2])
 		scoreZero = strToBool(sys.argv[3])
-	if len(sys.argv) != 1:
+	if len(sys.argv) != 1 and len(sys.argv) != 4:
 		raise Exception('Wrong number of parameters')
 
 	loss = maxScore/timeSimu
 	while not ((endTime and timeSimu <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+		print('\033[H\033[2J')
 		for x in robots.keys():
 			robots[x]['score'] -= loss
 			robots[x]['score'] = max(robots[x]['score'], 0)
 			print("Robot '{}' score = {}".format(x, robots[x]['score']))
+			#sys.stdout.write("Robot '{}' score = {}".format(x, robots[x]['score']))
+			#sys.stdout.flush()
+		time.sleep(0.1)
 		timeSimu = timeSimu - (time.time() - startTime)
