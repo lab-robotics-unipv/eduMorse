@@ -1,6 +1,7 @@
 import pymorse
 import pytoml as toml
 import os
+import sys
 import time
 
 # control if a file exists
@@ -11,6 +12,21 @@ def findFileInPath(filename, extension, paths):
 		elif os.path.exists(os.path.join(path, filename + '.' + extension)):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
+
+def strToBool(s):
+	if s == 'True':
+		return True
+	if s == 'False':
+		return False
+	raise ValueError('Wrong input')
+
+def strToInt(s):
+	try:
+		i = int(s)
+	except ValueError:
+		print('Wrong input')
+		raise
+	return i
 
 PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
 MORSELABPATH = os.environ.get("MORSELABPATH")
@@ -44,6 +60,13 @@ if __name__ == '__main__':
 		timeSimu = timeGame['timeSimu']
 		scoreZero = timeGame['scoreZero']
 		endTime = timeGame['endTime']
+
+	if len(sys.argv) == 4:
+		timeSimu = strToInt(sys.argv[1])
+		endTime = strToBool(sys.argv[2])
+		scoreZero = strToBool(sys.argv[3])
+	if len(sys.argv) != 1:
+		raise Exception('Wrong number of parameters')
 
 	loss = maxScore/timeSimu
 	while not ((endTime and timeSimu <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
