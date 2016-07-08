@@ -34,10 +34,9 @@ GAMESPATH = os.path.join(MORSELABPATH, "games")
 
 if __name__ == '__main__':
 	with pymorse.Morse() as simu:
-		startTime = simu.time()
+		startTime = time.time()
 		maxScore = 100
 
-	with pymorse.Morse() as simu:
 		robots = {}
 		for x in simu.robots:
 			robots[x] = {}
@@ -70,10 +69,15 @@ if __name__ == '__main__':
 			raise Exception('Wrong number of parameters')
 
 		loss = maxScore/timeSimu
-		while not ((endTime and timeSimu <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+		timeLeft = 1
+		while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
 			print('\033[H\033[2J')
+			diffStartTime = time.time() - startTime
+			timeLeft = timeSimu - diffStartTime
+			print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
+			print('----------------------------------------------')
 			for x in robots.keys():
-				robots[x]['score'] -= loss
+				robots[x]['score'] = maxScore - loss*diffStartTime
 				robots[x]['score'] = max(robots[x]['score'], 0)
 				if robots[x]['score'] == 0:
 					components = simu.__dict__[x]
@@ -83,6 +87,7 @@ if __name__ == '__main__':
 							simu.deactivate(s)
 						except pymorse.MorseServiceFailed:
 							pass
-				print("Robot '{}' score = {}".format(x, robots[x]['score']))
+				print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
+			print('----------------------------------------------')
+			print('{}:{}'.format('Time'.center(5), str(int(timeSimu - timeLeft)).center(5)))
 			time.sleep(0.2)
-			timeSimu = timeSimu - (simu.time() - startTime)
