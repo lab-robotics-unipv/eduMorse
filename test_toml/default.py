@@ -155,16 +155,22 @@ def main():
 					object_file = findFileInPath(o['file'], 'blend', [PWD, OBJECTSPATH])
 				except:
 					raise
-				objects.append(o['file'])
+				objects.append((object_file, o))
 
 			if len(objects) > num_object:
 				raise Exception('Too many objects')
 
-			for o in game['game']['objects']:
-				obj = PassiveObject(object_file, o['type'])
-				obj.translate(o['x'], o['y'], o['z'])
-				for prop in o['properties']:
+			for i in objects:
+				obj = PassiveObject(i[0], i[1]['type'])
+				obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
+				for prop in i[1]['properties']:
 					obj.properties(Label = prop['label'], GOAL = prop['goal'])
+
+			ballPath = os.path.join(OBJECTSPATH, "ball.blend")
+			obj = PassiveObject(ballPath, 'BALL')
+			obj.name = 'BALL'
+			obj.translate(1, 1, 1)
+			obj.properties(Label = 'BALL', Object = True)
 
 
 			############################################################
