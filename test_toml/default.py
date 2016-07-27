@@ -161,13 +161,14 @@ def main():
 				raise Exception('Too many objects')
 
 			for i in objects:
-				obj = PassiveObject(i[0], i[1]['type'])
+				obj = PassiveObject(i[0])
+				obj.name = i[1]['name']
 				obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
 				for prop in i[1]['properties']:
 					obj.properties(Label = prop['label'], GOAL = prop['goal'])
 
 			ballPath = os.path.join(OBJECTSPATH, "ball.blend")
-			obj = PassiveObject(ballPath, 'BALL')
+			obj = PassiveObject(ballPath)
 			obj.name = 'BALL'
 			obj.translate(1, 1, 1)
 			obj.properties(Label = 'BALL', Object = True)

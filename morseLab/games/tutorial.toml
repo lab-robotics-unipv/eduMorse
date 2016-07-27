@@ -6,7 +6,7 @@
 	sensors = ["Pose"]
 	[[game.objects]]
 		file = "objects"
-		type = "GOAL"
+		name = "GOAL"
 		x = 7
 		y = 7
 		z = 0.01
