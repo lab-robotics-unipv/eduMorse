@@ -97,6 +97,7 @@ def main():
 				robot = eval(rob['type'] + '()')
 				robot.name = robot_config[0]
 				aes = []  #actuators and sensors
+				aes.append('collision')
 
 				for act in rob['actuators']:
 					if act['id'] in aes:
@@ -120,6 +121,8 @@ def main():
 						raise Exception('Actuator type not allowed in this game')
 
 				for sens in rob['sensors']:
+					if sens['id'] in aes:
+						raise Exception('Error: sensor id is not unique')
 					if sens['type'] in game['game']['sensors']:
 						sensor = eval(sens['type'] + '()')
 						sensor.name = sens['id']
@@ -164,7 +167,7 @@ def main():
 			object_name = []
 			for i in objects:
 				if i[1]['name'] in object_name:
-					raise Exception('Object name is not unique')
+					raise Exception('Error: object name is not unique')
 				obj = PassiveObject(i[0])
 				obj.name = i[1]['name']
 				obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
