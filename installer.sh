@@ -19,7 +19,7 @@ sudo apt-get install -y python3-pip
 sudo pip3 install --upgrade pip
 sudo pip3 install pytoml
 
-# Install Morse simlator
+# Install Morse simulator
 cd /tmp
 git clone https://github.com/morse-simulator/morse.git
 cd morse
