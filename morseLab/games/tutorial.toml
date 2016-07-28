@@ -1,6 +1,6 @@
 [game]
 	numrobot = 1
-	numobject = 2
+	numobject = 3
 	map = "tutorial"
 	actuators = ["MotionVW", "Keyboard"]
 	sensors = ["Pose"]
@@ -15,10 +15,19 @@
 			GOAL = true
 	[[game.objects]]
 		file = "ball"
-		name = "BALL"
+		name = "BALL1"
 		x = 1
 		y = 1
 		z = 1
+		[game.objects.properties]
+			Label = "BALL"
+			Object = true
+	[[game.objects]]
+		file = "ball"
+		name = "BALL2"
+		x = 2
+		y = 2
+		z = 2
 		[game.objects.properties]
 			Label = "BALL"
 			Object = true
