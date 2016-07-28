@@ -23,6 +23,7 @@ def addCollisionToRobot(robot):
 	collision.translate(0, 0, 0)
 	collision.properties(only_objects_with_property="Object")
 	collision.scale = (0.8, 0.6, 0.8)
+	collision.frequency(3)
 	collision._make_transparent(collision._bpy_object, 0)
 	collision._bpy_object.game.physics_type = 'RIGID_BODY'
 	collision.add_interface("socket")
