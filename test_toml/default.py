@@ -161,13 +161,17 @@ def main():
 			if len(objects) > num_object:
 				raise Exception('Too many objects')
 
+			object_name = []
 			for i in objects:
+				if i[1]['name'] in object_name:
+					raise Exception('Object name is not unique')
 				obj = PassiveObject(i[0])
 				obj.name = i[1]['name']
 				obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
 				p = i[1].get('properties', None)
 				if p:
 					obj.properties(**p)
+				object_name.append(i[1]['name'])
 
 
 			############################################################
