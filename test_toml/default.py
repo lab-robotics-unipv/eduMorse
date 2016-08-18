@@ -144,8 +144,8 @@ def main():
 				addCollisionToRobot(robot)
 
 				pos = positions.pop()
-				robot.translate(pos['x'], pos['y'])
-				robot.rotate()
+				robot.translate(pos['x'], pos['y'], pos['z'])
+				robot.rotate(pos['p'], pos['q'], pos['r'])
 
 
 			############################################################

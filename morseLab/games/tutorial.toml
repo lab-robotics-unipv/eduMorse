@@ -41,6 +41,10 @@
 	[[game.robot_position]]
 		x = 7
 		y = 7
+		z = 0
+		p = 0
+		q = 0
+		r = 0
 	[[game.time]]
 		timeSimu = 30
 		scoreZero = true
