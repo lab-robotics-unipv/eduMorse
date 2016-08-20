@@ -5,6 +5,7 @@
 		file = "r"
 		name = "robot"
 	[[game.camera_position]]
+		robot = "robot"
 		x_cam = 0.5
 		y_cam = 0
 		z_cam = 0.6

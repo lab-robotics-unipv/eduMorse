@@ -91,12 +91,22 @@ def main():
 			############################################################
 
 			positions = list(game['game']['robot_position'])
+			display = False
 
 			for robot_config in config:
 				rob = robot_config[1]['robot']
 				robot = eval(rob['type'] + '()')
 				robot.name = robot_config[0]
-				aes = []  #actuators and sensors
+				for cam in simulation['game']['camera_position']:
+					if robot.name == cam['robot']:
+						camera = VideoCamera()
+						camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
+						camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
+						camera.properties(Vertical_Flip=False)
+						robot.append(camera)
+						display = True
+
+				aes = []  # actuators and sensors
 				aes.append('collision')
 
 				for act in rob['actuators']:
@@ -143,7 +153,7 @@ def main():
 
 				addCollisionToRobot(robot)
 
-				pos = positions.pop()
+				pos = positions.pop(0)
 				robot.translate(pos['x'], pos['y'], pos['z'])
 				robot.rotate(pos['p'], pos['q'], pos['r'])
 
@@ -196,13 +206,8 @@ def main():
 				env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
 				env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
 
-			camera = VideoCamera()
-			for cam in simulation['game']['camera_position']:
-				camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
-				camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
-			camera.properties(Vertical_Flip=False)
-			robot.append(camera)
-			env.select_display_camera(camera)
+			if display:
+				env.select_display_camera(camera)
 
 if __name__ == "__main__":
 	main()
