@@ -4,7 +4,7 @@ period = 1/3
 
 def counter(data, x, robots):
 
-	if data["collision"]: # collision occured
+	if data["collision"]: # collision occurred
 		if robots[x]['obj'] == data["objects"]: # robot collides again with the same object of the previous collision
 
 			# check if robot is still colliding against the object considering the frequency of the sensor
