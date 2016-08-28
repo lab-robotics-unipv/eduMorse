@@ -18,11 +18,11 @@ def findFileInPath(filename, extension, paths):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
-def addCollisionToRobot(robot):
+def addCollisionToRobot(robot, s):
 	collision = Collision()
 	collision.translate(0, 0, 0)
 	collision.properties(only_objects_with_property="Object")
-	collision.scale = (0.8, 0.6, 0.8)
+	collision.scale = (s[0], s[1], s[2])
 	collision.frequency(3)
 	collision._make_transparent(collision._bpy_object, 0)
 	collision._bpy_object.game.physics_type = 'RIGID_BODY'
@@ -151,7 +151,8 @@ def main():
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				addCollisionToRobot(robot)
+				for c in rob['collision']:
+					addCollisionToRobot(robot, [c['x'], c['y'], c['z']])
 
 				pos = positions.pop(0)
 				robot.translate(pos['x'], pos['y'], pos['z'])
