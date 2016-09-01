@@ -1,0 +1,7 @@
+[layer]
+	[[layer.score]]
+		obj = "BALL1"
+		score = 10
+	[[layer.score]]
+		obj = "BALL2"
+		score = -10
