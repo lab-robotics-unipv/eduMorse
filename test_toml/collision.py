@@ -7,7 +7,6 @@ PORT = 50000
 
 def send(robot, obj, socket):
 	message = robot + '.' + obj + '\x04'
-	print(message)
 	socket.sendall(message.encode('utf-8'))
 
 
