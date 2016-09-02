@@ -20,7 +20,7 @@ Bash script installer.sh installs Morse simulator and all dependencies useful to
 To run the script open a terminal and type:  
 ```$ chmod +x installer.sh```  
 ```$ ./installer.sh```  
-The installer needs an Internet connection and ```apt-get``` command, it was tested on Xubuntu 14.04.4.  
+The installer needs an Internet connection and ```apt-get``` command, it was tested on Xubuntu 14.04.4 and Xubuntu 16.04.1.  
 Check your system requirements and find other informations about Morse simulator [here](https://www.openrobots.org/morse/doc/stable/user/installation.html).  
 
 ### Dependencies list:
