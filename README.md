@@ -5,11 +5,11 @@ The aim of this project is to enhance the existing educational tool for the robo
 ### features to implement
 - [x] Simplify the installation through an installer script
 - [x] Configure and start a simulation from a conf file
-- [ ] Detect collisions
-- [ ] Scoring
+- [x] Detect collisions
+- [x] Scoring
 - [ ] Simulate energy losses
-- [ ] Robot2robot communication with bandwidth limits
-- [x] Posibility to use different machines for environment and robots
+- [x] Robot2robot communication with bandwidth limits
+- [x] Possibility to use different machines for environment and robots
 
 <!-- [] gestione multi robot -->
 
