@@ -60,8 +60,6 @@ if __name__ == '__main__':
 						obj = message[point + 1:]
 						for o in layer['score']:
 							if obj in o['obj']:
-								print(robot)
-								print(obj)
-								send(robot, str(['score']), conn)
+								send(robot, str(o['score']), conn)
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
