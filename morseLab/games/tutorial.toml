@@ -1,18 +1,36 @@
 [game]
 	numrobot = 1
-	numobject = 1
+	numobject = 3
 	map = "tutorial"
 	actuators = ["MotionVW", "Keyboard"]
 	sensors = ["Pose"]
 	[[game.objects]]
 		file = "objects"
-		type = "GOAL"
+		name = "GOAL"
 		x = 7
 		y = 7
 		z = 0.01
-		[[game.objects.properties]]
-			label = "GOAL"
-			goal = true
+		[game.objects.properties]
+			Label = "GOAL"
+			GOAL = true
+	[[game.objects]]
+		file = "ball"
+		name = "BALL1"
+		x = 1
+		y = 1
+		z = 1
+		[game.objects.properties]
+			Label = "BALL"
+			Object = true
+	[[game.objects]]
+		file = "ball"
+		name = "BALL2"
+		x = 2
+		y = 2
+		z = 2
+		[game.objects.properties]
+			Label = "BALL"
+			Object = true
 	[[game.camera_position]]
 		x_cam = -18.0
 		y_cam = -6.7
@@ -23,3 +41,11 @@
 	[[game.robot_position]]
 		x = 7
 		y = 7
+		z = 0
+		p = 0
+		q = 0
+		r = 0
+	[[game.time]]
+		timeSimu = 30
+		scoreZero = true
+		endTime = false

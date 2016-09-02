@@ -18,6 +18,17 @@ def findFileInPath(filename, extension, paths):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
+def addCollisionToRobot(robot, s):
+	collision = Collision()
+	collision.translate(0, 0, 0)
+	collision.properties(only_objects_with_property="Object")
+	collision.scale = (s[0], s[1], s[2])
+	collision.frequency(3)
+	collision._make_transparent(collision._bpy_object, 0)
+	collision._bpy_object.game.physics_type = 'RIGID_BODY'
+	collision.add_interface("socket")
+	robot.append(collision)
+
 def main():
 
 	############################################################
@@ -80,12 +91,23 @@ def main():
 			############################################################
 
 			positions = list(game['game']['robot_position'])
+			display = False
 
 			for robot_config in config:
 				rob = robot_config[1]['robot']
 				robot = eval(rob['type'] + '()')
 				robot.name = robot_config[0]
-				aes = []  #actuators and sensors
+				for cam in simulation['game']['camera_position']:
+					if robot.name == cam['robot']:
+						camera = VideoCamera()
+						camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
+						camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
+						camera.properties(Vertical_Flip=False)
+						robot.append(camera)
+						display = True
+
+				aes = []  # actuators and sensors
+				aes.append('collision')
 
 				for act in rob['actuators']:
 					if act['id'] in aes:
@@ -109,6 +131,8 @@ def main():
 						raise Exception('Actuator type not allowed in this game')
 
 				for sens in rob['sensors']:
+					if sens['id'] in aes:
+						raise Exception('Error: sensor id is not unique')
 					if sens['type'] in game['game']['sensors']:
 						sensor = eval(sens['type'] + '()')
 						sensor.name = sens['id']
@@ -127,9 +151,12 @@ def main():
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				pos = positions.pop()
-				robot.translate(pos['x'], pos['y'])
-				robot.rotate()
+				for c in rob['collision']:
+					addCollisionToRobot(robot, [c['x'], c['y'], c['z']])
+
+				pos = positions.pop(0)
+				robot.translate(pos['x'], pos['y'], pos['z'])
+				robot.rotate(pos['p'], pos['q'], pos['r'])
 
 
 			############################################################
@@ -143,16 +170,22 @@ def main():
 					object_file = findFileInPath(o['file'], 'blend', [PWD, OBJECTSPATH])
 				except:
 					raise
-				objects.append(o['file'])
+				objects.append((object_file, o))
 
 			if len(objects) > num_object:
 				raise Exception('Too many objects')
 
-			for o in game['game']['objects']:
-				obj = PassiveObject(object_file, o['type'])
-				obj.translate(o['x'], o['y'], o['z'])
-				for prop in o['properties']:
-					obj.properties(Label = prop['label'], GOAL = prop['goal'])
+			object_name = []
+			for i in objects:
+				if i[1]['name'] in object_name:
+					raise Exception('Error: object name is not unique')
+				obj = PassiveObject(i[0])
+				obj.name = i[1]['name']
+				obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
+				p = i[1].get('properties', None)
+				if p:
+					obj.properties(**p)
+				object_name.append(i[1]['name'])
 
 
 			############################################################
@@ -174,13 +207,9 @@ def main():
 				env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
 				env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
 
-			camera = VideoCamera()
-			for cam in simulation['game']['camera_position']:
-				camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
-				camera.rotate(cam['p_cam'], cam['q_cam'], cam['r_cam'])
-			camera.properties(Vertical_Flip=False)
-			robot.append(camera)
-			env.select_display_camera(camera)
+			if display:
+				env.select_display_camera(camera)
 
 if __name__ == "__main__":
 	main()
+

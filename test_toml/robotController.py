@@ -29,9 +29,9 @@ with Morse() as simu:
 
     # Get sensor measurements and control the actuator
     pose.get()                              # get from pose sensor
-    ir1.get()                               # get form ir sensor #1
-    ir2.get()                               # get form ir sensor #2
-    ir3.get()                               # get form ir sensor #3
-    ir4.get()                               # get form ir sensor #4
-    prox.get()                              # get from proximity senso
+    ir1.get()                               # get from ir sensor #1
+    ir2.get()                               # get from ir sensor #2
+    ir3.get()                               # get from ir sensor #3
+    ir4.get()                               # get from ir sensor #4
+    prox.get()                              # get from proximity sensor
     motion.publish({"v": 0, "w": 0})        # set robot linear and angular speed

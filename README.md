@@ -5,10 +5,45 @@ The aim of this project is to enhance the existing educational tool for the robo
 ### features to implement
 - [x] Simplify the installation through an installer script
 - [x] Configure and start a simulation from a conf file
-- [ ] Detect collisions
-- [ ] Scoring
+- [x] Detect collisions
+- [x] Scoring
 - [ ] Simulate energy losses
-- [ ] Robot2robot communication with bandwidth limits
-- [x] Posibility to use different machines for environment and robots
+- [x] Robot2robot communication with bandwidth limits
+- [x] Possibility to use different machines for environment and robots
 
 <!-- [] gestione multi robot -->
+
+
+## Installation
+
+Bash script installer.sh installs Morse simulator and all dependencies useful to the project.  
+To run the script open a terminal and type:  
+```$ chmod +x installer.sh```  
+```$ ./installer.sh```  
+The installer needs an Internet connection and ```apt-get``` command, it was tested on Xubuntu 14.04.4 and Xubuntu 16.04.1.  
+Check your system requirements and find other informations about Morse simulator [here](https://www.openrobots.org/morse/doc/stable/user/installation.html).  
+
+### Dependencies list:
+- cmake
+- cmake-data
+- pkg-config
+- g++
+- scons
+- openjdk-7-jre-headless
+- openjdk-7-jdk
+- blender
+- git
+- python3
+- python3-dev
+- python3-numpy
+- python3-pip
+- pytoml
+
+### Directory diagram  
+After the installation new files are added in _/opt_. At the top of directory hierarchy there is _morseLab_ folder, it contains:  
+- games -> blend files for maps and objects, conf files for games and robots
+- libraries -> C and Java libraries to support programming in these languages
+- socket -> client-server communication
+- test_toml -> scoring script, configuration script to launch simulation, main function in C and Java, example of Python script to control a robot  
+
+See [directory diagram](https://rlabgw0.unipv.it/Morse_Simulator/simulator/wikis/directory-structure).
