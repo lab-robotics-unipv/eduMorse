@@ -31,7 +31,7 @@ morse check
 # Retrieving the custom simulation files
 cd /tmp
 FILE=morseLab
-URL="https://robolab.unipv.it/owncloud/index.php/s/w0VLQH6Bigp6XKc/download"
+URL="https://rlabgw0.unipv.it:10026/index.php/s/Fwlt7mdJDKifOC4/download"
 wget --no-check-certificate -O $FILE.tar.gz $URL
 sudo tar -xvzf /tmp/$FILE.tar.gz -C /opt
 cd /opt/morseLab/libraries/cBindings
