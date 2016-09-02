@@ -72,6 +72,7 @@ if __name__ == '__main__':
 			for x in simu.robots:
 				robots[x] = {}
 				robots[x]['score'] = maxScore
+				robots[x]['collision'] = 0
 
 			# Open and load the local file containing the configuration of the simulation
 			with open(os.path.join(PWD, "g.toml"), 'r') as gfile:
@@ -112,11 +113,11 @@ if __name__ == '__main__':
 					score = message[point + 1:]
 					for x in robots.keys():
 						if x == robot:
-							robots[x]['score'] += float(score)
+							robots[x]['collision'] += float(score)
 				print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
 				print('----------------------------------------------')
 				for x in robots.keys():
-					robots[x]['score'] = maxScore - loss*diffStartTime
+					robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
 					robots[x]['score'] = max(robots[x]['score'], 0)
 					if robots[x]['score'] == 0:
 						components = simu.__dict__[x]
