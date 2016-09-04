@@ -31,8 +31,6 @@ HOST = 'localhost'
 PORT = 50000
 PORTSCORE = 50001
 PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
-#MORSELABPATH = os.environ.get("MORSELABPATH")
-#TOMLPATH = os.path.join(MORSELABPATH, "test_toml")
 
 if __name__ == '__main__':
 	# connect to collision.py
@@ -50,16 +48,19 @@ if __name__ == '__main__':
 				socketScore.listen(1)
 				conn, addr = socketScore.accept()
 
+				print("Press ctrl+C to stop")
+
 				try:
 					while True:
-						while not messageInSocket(s):
-							pass
-						message = receive(s)
-						point = message.find('.')
-						robot = message[:point]
-						obj = message[point + 1:]
-						for o in layer['score']:
-							if obj in o['obj']:
-								send(robot, str(o['score']), conn)
+						if layer != {}:
+							while not messageInSocket(s):
+								pass
+							message = receive(s)
+							point = message.find('.')
+							robot = message[:point]
+							obj = message[point + 1:]
+							for o in layer['score']:
+								if obj in o['obj']:
+									send(robot, str(o['score']), conn)
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
