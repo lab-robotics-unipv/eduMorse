@@ -18,6 +18,7 @@ def findFileInPath(filename, extension, paths):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
+
 def addCollisionToRobot(robot, s):
 	collision = Collision()
 	collision.translate(0, 0, s[0])
@@ -26,13 +27,14 @@ def addCollisionToRobot(robot, s):
 	collision.add_interface("socket")
 	robot.append(collision)
 
+
 def main():
 
 	############################################################
 	# IMPORTANT PATHS
 	############################################################
 
-	PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
+	PWD = os.path.dirname(os.path.abspath(__file__))
 	MORSELABPATH = os.environ.get("MORSELABPATH")
 	GAMESPATH = os.path.join(MORSELABPATH, "games")
 	MAPSPATH = os.path.join(GAMESPATH, "maps")
