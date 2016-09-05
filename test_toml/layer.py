@@ -30,7 +30,7 @@ def messageInSocket(s):
 HOST = 'localhost'
 PORT = 50000
 PORTSCORE = 50001
-PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
+PWD = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
 	# connect to collision.py
