@@ -64,3 +64,4 @@ if __name__ == '__main__':
 									send(robot, str(o['score']), conn)
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
+					socketScore.close()
