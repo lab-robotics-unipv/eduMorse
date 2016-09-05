@@ -122,12 +122,14 @@ if __name__ == '__main__':
 					if robots[x]['score'] == 0:
 						components = simu.__dict__[x]
 						for c in components:
-							s = x + "." + c
+							deact = x + "." + c
 							try:
-								simu.deactivate(s)
+								simu.deactivate(deact)
 							except pymorse.MorseServiceFailed:
 								pass
 					print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
 				print('----------------------------------------------')
 				print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))
 				time.sleep(0.2)
+
+			s.close()
