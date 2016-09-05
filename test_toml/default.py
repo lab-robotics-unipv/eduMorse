@@ -18,16 +18,15 @@ def findFileInPath(filename, extension, paths):
 			return os.path.join(path, filename + '.' + extension)
 	raise FileNotFoundError('File ' + filename + ' not found')
 
+
 def addCollisionToRobot(robot, s):
 	collision = Collision()
-	collision.translate(0, 0, 0)
-	collision.properties(only_objects_with_property="Object")
-	collision.scale = (s[0], s[1], s[2])
+	collision.translate(0, 0, s[0])
+	collision.scale = (s[1], s[2], s[3])
 	collision.frequency(3)
-	collision._make_transparent(collision._bpy_object, 0)
-	collision._bpy_object.game.physics_type = 'RIGID_BODY'
 	collision.add_interface("socket")
 	robot.append(collision)
+
 
 def main():
 
@@ -35,7 +34,7 @@ def main():
 	# IMPORTANT PATHS
 	############################################################
 
-	PWD = os.path.join(os.environ['HOME'], 'simulator/test_toml')
+	PWD = os.path.dirname(os.path.abspath(__file__))
 	MORSELABPATH = os.environ.get("MORSELABPATH")
 	GAMESPATH = os.path.join(MORSELABPATH, "games")
 	MAPSPATH = os.path.join(GAMESPATH, "maps")
@@ -152,7 +151,7 @@ def main():
 						raise Exception('Sensor type not allowed in this game')
 
 				for c in rob['collision']:
-					addCollisionToRobot(robot, [c['x'], c['y'], c['z']])
+					addCollisionToRobot(robot, [c['zTran'], c['x'], c['y'], c['z']])
 
 				pos = positions.pop(0)
 				robot.translate(pos['x'], pos['y'], pos['z'])

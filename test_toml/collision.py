@@ -19,14 +19,14 @@ def counter(data, x, robots, socket):
 				# check if robot is still colliding against the object considering the frequency of the sensor
 				if (data['timestamp'] - robots[x]['timestamp']) > 1.2*period: # 1.2=factor of security for float count
 					robots[x]['nb_collisions'] += 1
-					print("Collision with {}! In total, {} collisions occured, robot name '{}'".format(robots[x]['obj'], robots[x]['nb_collisions'], x))
+					#print("Collision with {}! In total, {} collisions occured, robot name '{}'".format(robots[x]['obj'], robots[x]['nb_collisions'], x))
 					send(x, robots[x]['obj'], socket)
 
 			else:
 				# robot collides with a different object than the previous collision
 				robots[x]['nb_collisions'] += 1
 				robots[x]['obj'] = o
-				print("Collision with {}! In total, {} collisions occured, robot name '{}'".format(robots[x]['obj'], robots[x]['nb_collisions'], x))
+				#print("Collision with {}! In total, {} collisions occured, robot name '{}'".format(robots[x]['obj'], robots[x]['nb_collisions'], x))
 				send(x, robots[x]['obj'], socket)
 
 			robots[x]['timestamp'] = data["timestamp"] # timestamp is registered every time

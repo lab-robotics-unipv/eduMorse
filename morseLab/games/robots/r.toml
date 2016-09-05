@@ -25,6 +25,7 @@
 		[robot.sensors.interface]
 			type = 'socket'
 	[[robot.collision]]
+		zTran = 0.3
 		x = 0.8
 		y = 0.6
-		z = 0.8
+		z = 0.05
