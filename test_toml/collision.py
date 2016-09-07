@@ -1,5 +1,6 @@
 import pymorse
 import socket
+import time
 
 period = 1/3
 HOST = ''
@@ -49,7 +50,6 @@ if __name__ == '__main__':
 			for x in robots.keys():
 				simu.__dict__[x].collision.subscribe(lambda data: counter(data, x, robots, conn))
 
-			print("Press ctrl+C to stop")
+			#print("Press ctrl+C to stop")
 			while True:
-				s.close()
-				simu.sleep(10)
+				time.sleep(10)

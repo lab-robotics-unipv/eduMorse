@@ -29,8 +29,8 @@ Check your system requirements and find other informations about Morse simulator
 - pkg-config
 - g++
 - scons
-- openjdk-7-jre-headless
-- openjdk-7-jdk
+- openjdk-8-jre-headless
+- openjdk-8-jdk
 - blender
 - git
 - python3

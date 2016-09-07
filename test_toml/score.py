@@ -17,6 +17,16 @@ def findFileInPath(filename, extension, paths):
 	raise FileNotFoundError('File ' + filename + ' not found')
 
 
+# find the path of a simulation starting from the simulation name
+def findSimuPath(simuName):
+	with open(os.path.join(MORSECONFIGPATH, 'config'), 'r') as config:
+		for line in config:
+			if simuName in line:
+				lineList = line.split(' = ')
+				return lineList[1].strip('\n')
+		return None
+
+
 def strToBool(s):
 	if s == 'True':
 		return True
@@ -61,11 +71,19 @@ HOST = 'localhost'
 PORT = 50001
 HOSTSERVER = 'localhost'
 PORTSERVER = 4001
-PWD = os.path.dirname(os.path.abspath(__file__))
+MORSECONFIGPATH = os.path.join(os.environ['HOME'], '.morse/')
 MORSELABPATH = os.environ.get("MORSELABPATH")
 GAMESPATH = os.path.join(MORSELABPATH, "games")
 
 if __name__ == '__main__':
+
+	if len(sys.argv) != 2 and len(sys.argv) != 5:
+		raise Exception('Wrong number of parameters')
+
+	SIMUPATH = findSimuPath(sys.argv[1])
+	if SIMUPATH == None:
+		raise Exception('Simulation name not found')
+
 	with pymorse.Morse() as simu:
 
 		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -90,13 +108,13 @@ if __name__ == '__main__':
 					robots[x]['collision'] = 0
 
 				# Open and load the local file containing the configuration of the simulation
-				with open(os.path.join(PWD, "g.toml"), 'r') as gfile:
+				with open(os.path.join(SIMUPATH, "g.toml"), 'r') as gfile:
 					simulation = toml.loads(gfile.read())
 
 					#Check if game file exists and load it
 					game_name = simulation['game']['name']
 					try:
-						game_name = findFileInPath(game_name, 'toml', [PWD, GAMESPATH])
+						game_name = findFileInPath(game_name, 'toml', [SIMUPATH, GAMESPATH])
 					except:
 						raise
 
@@ -108,44 +126,42 @@ if __name__ == '__main__':
 					scoreZero = timeGame['scoreZero']
 					endTime = timeGame['endTime']
 
-				if len(sys.argv) == 4:
-					timeSimu = strToInt(sys.argv[1])
-					endTime = strToBool(sys.argv[2])
-					scoreZero = strToBool(sys.argv[3])
-				if len(sys.argv) != 1 and len(sys.argv) != 4:
-					raise Exception('Wrong number of parameters')
+				if len(sys.argv) == 5:
+					timeSimu = strToInt(sys.argv[2])
+					endTime = strToBool(sys.argv[3])
+					scoreZero = strToBool(sys.argv[4])
 
 				loss = maxScore/timeSimu
 				timeLeft = 1
-				while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
-					print('\033[H\033[2J')
-					diffStartTime = time.time() - startTime
-					timeLeft = timeSimu - diffStartTime
-					while messageInSocket(s):
-						message = receive(s)
-						point = message.find('.')
-						robot = message[:point]
-						score = message[point + 1:]
+				try:
+					while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+						print('\033[H\033[2J')
+						diffStartTime = time.time() - startTime
+						timeLeft = timeSimu - diffStartTime
+						while messageInSocket(s):
+							message = receive(s)
+							point = message.find('.')
+							robot = message[:point]
+							score = message[point + 1:]
+							for x in robots.keys():
+								if x == robot:
+									robots[x]['collision'] += float(score)
+						print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
+						print('----------------------------------------------')
 						for x in robots.keys():
-							if x == robot:
-								robots[x]['collision'] += float(score)
-					print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
-					print('----------------------------------------------')
-					for x in robots.keys():
-						robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
-						robots[x]['score'] = max(robots[x]['score'], 0)
-						if robots[x]['score'] == 0:
-							components = simu.__dict__[x]
-							for c in components:
-								deact = x + "." + c
-								try:
-									simu.deactivate(deact)
-								except pymorse.MorseServiceFailed:
-									pass
-						print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
-					print('----------------------------------------------')
-					print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))
-					time.sleep(0.2)
-
-				socketServer.close()
-			s.close()
+							robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
+							robots[x]['score'] = max(robots[x]['score'], 0)
+							if robots[x]['score'] == 0:
+								components = simu.__dict__[x]
+								for c in components:
+									deact = x + "." + c
+									try:
+										simu.deactivate(deact)
+									except pymorse.MorseServiceFailed:
+										pass
+							print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
+						print('----------------------------------------------')
+						print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))
+						time.sleep(0.2)
+				except (KeyboardInterrupt, SystemExit):
+					print("score.py is shutting down")
