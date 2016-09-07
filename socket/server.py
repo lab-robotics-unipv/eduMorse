@@ -101,5 +101,5 @@ if __name__ == '__main__':
 		s.close()
 		for x in robots.keys():
 			robots[x]['conn'].close()
-		print('Server is shutting down')
+		print('server.py is shutting down')
 		sys.exit(0)

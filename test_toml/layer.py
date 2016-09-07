@@ -48,7 +48,7 @@ if __name__ == '__main__':
 				socketScore.listen(1)
 				conn, addr = socketScore.accept()
 
-				print("Press ctrl+C to stop")
+				#print("Press ctrl+C to stop")
 
 				try:
 					while True:
@@ -65,3 +65,4 @@ if __name__ == '__main__':
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
 					socketScore.close()
+					print("layer.py is shutting down")
