@@ -117,35 +117,35 @@ if __name__ == '__main__':
 
 				loss = maxScore/timeSimu
 				timeLeft = 1
-				while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
-					print('\033[H\033[2J')
-					diffStartTime = time.time() - startTime
-					timeLeft = timeSimu - diffStartTime
-					while messageInSocket(s):
-						message = receive(s)
-						point = message.find('.')
-						robot = message[:point]
-						score = message[point + 1:]
+				try:
+					while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+						print('\033[H\033[2J')
+						diffStartTime = time.time() - startTime
+						timeLeft = timeSimu - diffStartTime
+						while messageInSocket(s):
+							message = receive(s)
+							point = message.find('.')
+							robot = message[:point]
+							score = message[point + 1:]
+							for x in robots.keys():
+								if x == robot:
+									robots[x]['collision'] += float(score)
+						print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
+						print('----------------------------------------------')
 						for x in robots.keys():
-							if x == robot:
-								robots[x]['collision'] += float(score)
-					print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
-					print('----------------------------------------------')
-					for x in robots.keys():
-						robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
-						robots[x]['score'] = max(robots[x]['score'], 0)
-						if robots[x]['score'] == 0:
-							components = simu.__dict__[x]
-							for c in components:
-								deact = x + "." + c
-								try:
-									simu.deactivate(deact)
-								except pymorse.MorseServiceFailed:
-									pass
-						print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
-					print('----------------------------------------------')
-					print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))
-					time.sleep(0.2)
-
-				socketServer.close()
-			s.close()
+							robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
+							robots[x]['score'] = max(robots[x]['score'], 0)
+							if robots[x]['score'] == 0:
+								components = simu.__dict__[x]
+								for c in components:
+									deact = x + "." + c
+									try:
+										simu.deactivate(deact)
+									except pymorse.MorseServiceFailed:
+										pass
+							print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
+						print('----------------------------------------------')
+						print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))
+						time.sleep(0.2)
+				except (KeyboardInterrupt, SystemExit):
+					print("score.py is shutting down")
