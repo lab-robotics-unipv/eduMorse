@@ -34,25 +34,25 @@ if start == 'start':
 		while True:
 			pass
 	except (KeyboardInterrupt, SystemExit):
-		score.terminate()
-		time.sleep(0.3)
+		collision.terminate()
+		time.sleep(1)
 
 		layer.terminate()
-		time.sleep(0.3)
+		time.sleep(1)
 
-		collision.terminate()
-		time.sleep(0.3)
+		score.terminate()
+		time.sleep(1)
 		print("collision.py is shutting down")
 
 		server.terminate()
-		time.sleep(0.3)
+		time.sleep(1)
 else:
 	print('Wrong command')
-	layer.terminate()
-	time.sleep(0.3)
-
 	collision.terminate()
-	time.sleep(0.3)
+	time.sleep(1)
+
+	layer.terminate()
+	time.sleep(1)
 
 	server.terminate()
-	time.sleep(0.3)
+	time.sleep(1)
