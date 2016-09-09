@@ -25,8 +25,8 @@ def receive(conn):
 	return message
 
 
-def send(robot, score, socket):
-	message = robot + '.' + str(score) + '\x04'
+def send(robot, score, stop, socket):
+	message = robot + '.' + str(score) + '.' + str(stop) + '\x04'
 	socket.sendall(message.encode('utf-8'))
 
 
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 							obj = message[point + 1:]
 							for o in layer['score']:
 								if obj in o['obj']:
-									send(robot, str(o['score']), conn)
+									send(robot, str(o['score']), str(o['stop']), conn)
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
 					socketScore.close()
