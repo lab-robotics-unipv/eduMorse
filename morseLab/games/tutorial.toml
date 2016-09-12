@@ -1,3 +1,6 @@
+# hit the balls to gain points
+# instead if the robot hits the wall, it loses points
+
 [game]
 	numrobot = 1
 	numobject = 3

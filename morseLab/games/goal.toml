@@ -1,3 +1,6 @@
+# hit the ball to gain points
+# if the robot hits the cube, it wins the game
+
 [game]
 	numrobot = 1
 	numobject = 3
