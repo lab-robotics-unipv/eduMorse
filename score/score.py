@@ -67,6 +67,16 @@ def messageInSocket(s):
 		return True
 
 
+def stopRobot(simu, robot):
+	components = simu.__dict__[robot]
+	for c in components:
+		deact = robot + "." + c
+		try:
+			simu.deactivate(deact)
+		except pymorse.MorseServiceFailed:
+			pass
+
+
 HOST = 'localhost'
 PORT = 50001
 HOSTSERVER = 'localhost'
@@ -106,6 +116,7 @@ if __name__ == '__main__':
 					robots[x] = {}
 					robots[x]['score'] = maxScore
 					robots[x]['collision'] = 0
+					robots[x]['stop'] = False
 
 				# Open and load the local file containing the configuration of the simulation
 				with open(os.path.join(SIMUPATH, "g.toml"), 'r') as gfile:
@@ -140,25 +151,25 @@ if __name__ == '__main__':
 						timeLeft = timeSimu - diffStartTime
 						while messageInSocket(s):
 							message = receive(s)
-							point = message.find('.')
-							robot = message[:point]
-							score = message[point + 1:]
+							point = message.split('.')
+							robot = point[0]
+							score = point[1]
+							stop = point[2]
 							for x in robots.keys():
 								if x == robot:
 									robots[x]['collision'] += float(score)
+									if stop == 'True':
+										stopRobot(simu, x)
+										robots[x]['stop'] = True
+										robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
 						print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
 						print('----------------------------------------------')
 						for x in robots.keys():
-							robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
-							robots[x]['score'] = max(robots[x]['score'], 0)
+							if not robots[x]['stop']:
+								robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
+								robots[x]['score'] = max(robots[x]['score'], 0)
 							if robots[x]['score'] == 0:
-								components = simu.__dict__[x]
-								for c in components:
-									deact = x + "." + c
-									try:
-										simu.deactivate(deact)
-									except pymorse.MorseServiceFailed:
-										pass
+								stopRobot(simu, x)
 							print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
 						print('----------------------------------------------')
 						print('{}:{}'.format('Time'.center(5), str(int(diffStartTime)).center(5)))

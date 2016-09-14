@@ -7,7 +7,7 @@ import time
 
 MORSELABPATH = os.environ.get("MORSELABPATH")
 SERVERPATH = os.path.join(MORSELABPATH, "socket")
-TESTPATH = os.path.join(MORSELABPATH, "test_toml")
+SCOREPATH = os.path.join(MORSELABPATH, "score")
 
 if len(sys.argv) != 2:
 	print("Wrong number of parameters")
@@ -17,42 +17,42 @@ server = subprocess.Popen("python3 {}".format(os.path.join(SERVERPATH, "server.p
 print("server.py is running")
 time.sleep(1)
 
-collision = subprocess.Popen("python3 {}".format(os.path.join(TESTPATH, "collision.py")).split(" "))
+collision = subprocess.Popen("python3 {}".format(os.path.join(SCOREPATH, "collision.py")).split(" "))
 print("collision.py is running")
 time.sleep(1)
 
-layer = subprocess.Popen("python3 {} {}".format(os.path.join(TESTPATH, "layer.py"), sys.argv[1]).split(" "))
+layer = subprocess.Popen("python3 {} {}".format(os.path.join(SCOREPATH, "layer.py"), sys.argv[1]).split(" "))
 print("layer.py is running")
 time.sleep(1)
 
 start = input("Type 'start' to count the score and to begin game: ")
 if start == 'start':
-	score = subprocess.Popen("python3 {} {}".format(os.path.join(TESTPATH, "score.py"), sys.argv[1]).split(" "))
+	score = subprocess.Popen("python3 {} {}".format(os.path.join(SCOREPATH, "score.py"), sys.argv[1]).split(" "))
 	print("score.py is running")
 	time.sleep(1)
 	try:
 		while True:
 			pass
 	except (KeyboardInterrupt, SystemExit):
-		score.terminate()
-		time.sleep(0.3)
+		collision.terminate()
+		time.sleep(1)
 
 		layer.terminate()
-		time.sleep(0.3)
+		time.sleep(1)
 
-		collision.terminate()
-		time.sleep(0.3)
+		score.terminate()
+		time.sleep(1)
 		print("collision.py is shutting down")
 
 		server.terminate()
-		time.sleep(0.3)
+		time.sleep(1)
 else:
 	print('Wrong command')
-	layer.terminate()
-	time.sleep(0.3)
-
 	collision.terminate()
-	time.sleep(0.3)
+	time.sleep(1)
+
+	layer.terminate()
+	time.sleep(1)
 
 	server.terminate()
-	time.sleep(0.3)
+	time.sleep(1)
