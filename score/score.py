@@ -129,20 +129,23 @@ if __name__ == '__main__':
 					except:
 						raise
 
-				with open(game_name) as gamefile:
+				with open(game_name, 'r') as gamefile:
 					game = toml.loads(gamefile.read())
 
-				for timeGame in game['game']['time']:
-					timeSimu = timeGame['timeSimu']
-					scoreZero = timeGame['scoreZero']
-					endTime = timeGame['endTime']
+					timeSimu = game['game']['time']['timeSimu']
+					scoreZero = game['game']['time']['scoreZero']
+					endTime = game['game']['time']['endTime']
+
+					init = game['game'].get('initScore', {})
+					k = init.get('k', 0)
+					initialScore = init.get('initialScore', 0)
+					stopFlag = init.get('stopFlag', False)
 
 				if len(sys.argv) == 5:
 					timeSimu = strToInt(sys.argv[2])
 					endTime = strToBool(sys.argv[3])
 					scoreZero = strToBool(sys.argv[4])
 
-				loss = maxScore/timeSimu
 				timeLeft = 1
 				try:
 					while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
@@ -161,14 +164,15 @@ if __name__ == '__main__':
 									if stop == 'True':
 										stopRobot(simu, x)
 										robots[x]['stop'] = True
-										robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
+										robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
 						print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
 						print('----------------------------------------------')
 						for x in robots.keys():
 							if not robots[x]['stop']:
-								robots[x]['score'] = maxScore - loss*diffStartTime + robots[x]['collision']
+								robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
+							if not stopFlag:
 								robots[x]['score'] = max(robots[x]['score'], 0)
-							if robots[x]['score'] == 0:
+							if robots[x]['score'] == 0 and stopFlag:
 								stopRobot(simu, x)
 							print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
 						print('----------------------------------------------')

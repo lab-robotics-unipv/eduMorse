@@ -48,7 +48,11 @@
 		p = 0
 		q = 0
 		r = 3.14
-	[[game.time]]
+	[game.time]
 		timeSimu = 30
 		scoreZero = false
 		endTime = true
+	[game.initScore]
+		k = 0
+		initialScore = 0
+		stopFlag = false
