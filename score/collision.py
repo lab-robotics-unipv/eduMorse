@@ -9,36 +9,38 @@ class count:
 		self.x = x
 		self.period = 1/3
 		self.socket = socket
-		self.timestamp = 0
 		self.nb_collisions = 0
-		self.obj = None
-
+		self.obj = {}
 
 	def send(self, robot, obj, socket):
-		message = robot + '.' + obj + '\x04'
+		message = robot + '.' + '.'.join(obj) + '\x04'
 		socket.sendall(message.encode('utf-8'))
 
-
 	def counter(self, data):
-
 		if data["collision"]: # collision occurred
+
+            objs = []
+
 			for o in data["objects"].split(','):
-				if self.obj == o: # robot collides again with the same object of the previous collision
+				if o in self.obj.keys(): # robot collides again with the same object of the previous collision
 
 					# check if robot is still colliding against the object considering the frequency of the sensor
-					if (data['timestamp'] - self.timestamp) > 1.2*self.period: # 1.2=factor of security for float count
+					if (data['timestamp'] - self.obj[o]['timestamp']) > 1.2*self.period: # 1.2=factor of security for float count
 						self.nb_collisions += 1
 						#print("Collision with {}! In total, {} collisions occurred, robot name '{}'".format(self.obj, self.nb_collisions, self.x))
-						self.send(self.x, self.obj, self.socket)
+                        objs.append(o)
+						#self.send(self.x, self.obj, self.socket)
 
 				else:
 					# robot collides with a different object than the previous collision
 					self.nb_collisions += 1
-					self.obj = o
+					self.obj[o] = {}
 					#print("Collision with {}! In total, {} collisions occurred, robot name '{}'".format(self.obj, self.nb_collisions, self.x))
-					self.send(self.x, self.obj, self.socket)
+					# self.send(self.x, self.obj, self.socket)
+                    objs.append(o)
 
-				self.timestamp = data["timestamp"] # timestamp is registered every time
+				self.obj[o]['timestamp'] = data["timestamp"] # timestamp is registered every time
+                self.send(self.x, objs, self.socket)
 
 
 HOST = ''
