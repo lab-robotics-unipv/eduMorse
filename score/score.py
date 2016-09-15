@@ -170,7 +170,7 @@ if __name__ == '__main__':
 						for x in robots.keys():
 							if not robots[x]['stop']:
 								robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
-							if not stopFlag:
+							if stopFlag:
 								robots[x]['score'] = max(robots[x]['score'], 0)
 							if robots[x]['score'] == 0 and stopFlag:
 								stopRobot(simu, x)
