@@ -3,6 +3,7 @@ import os
 import select
 import socket
 import sys
+import time
 
 
 # find the path of a simulation starting from the simulation name
@@ -71,26 +72,26 @@ if __name__ == '__main__':
 
 				try:
 					while True:
-                        if layer.get('layer', None) == None:
-                            time.sleep(1)
-                            continue
+						if len(layer.get('score', [])) == 0:
+							time.sleep(1)
+							continue
 
-                        while not messageInSocket(s):
-                            pass
+						while not messageInSocket(s):
+							pass
 
 						message = receive(s)
-                        parts = message.split('.')
+						parts = message.split('.')
 						robot = parts[0]
-                        obj = parts[1:]
+						obj = parts[1:]
 
-                        score = 0
-                        stop = False
-						for s in layer['score']:
-                            for o in obj:
-							    if o in s['obj']:
-                                    score += s['score']
-                                    stop |= s['stop']
-                        send(robot, str(score), str(stop), conn)
+						score = 0
+						stop = False
+						for l in layer['score']:
+							for o in obj:
+								if o in l['obj']:
+									score += l['score']
+									stop |= l['stop']
+									send(robot, str(score), str(stop), conn)
 				except (KeyboardInterrupt, SystemExit):
 					s.close()
 					socketScore.close()
