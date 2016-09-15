@@ -1,4 +1,6 @@
 [layer]
+	time = -1
+	initialScore = 100
 	[[layer.score]]
 		obj = "BALL1"
 		score = 10
