@@ -45,6 +45,4 @@ After the installation new files are added in _/opt_. At the top of directory hi
 - libraries -> C and Java libraries to support programming in these languages
 - score -> scripts to count score and collisions, a layer manages communication between them
 - socket -> client-server communication
-- test_toml -> configuration files (TOML format) to set a simulation, main function in C and Java, example of Python script to control a robot  
-
-See [directory diagram](https://rlabgw0.unipv.it/Morse_Simulator/simulator/wikis/directory-structure).
+- test_toml -> configuration files (TOML format) to set a simulation, main function in C and Java, example of Python script to control a robot
