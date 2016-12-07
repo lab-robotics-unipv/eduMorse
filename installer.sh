@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CURDIR=`pwd`
+
 # Install dependencies
 sudo apt-get install -y cmake
 sudo apt-get install -y cmake-data
@@ -37,6 +39,10 @@ sudo tar -xvzf /tmp/$FILE.tar.gz -C /opt
 cd /opt/morseLab/libraries/cBindings
 scons
 scons -c
+
+cd $CURDIR
+sudo cp eduMorseCreate.sh /opt/morseLab
+sudo cp eduMorseRunner.py /opt/morseLab
 
 # Setting the environment variables
 echo "# MORSELAB variables" >> $HOME/.bashrc
