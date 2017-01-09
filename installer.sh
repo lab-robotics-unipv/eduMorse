@@ -1,10 +1,10 @@
 #!/bin/bash
 
-sudo mv ./morseLab /opt
-sudo ln -s /opt/morseLab/eduMorseCreate.sh /usr/bin/eduMorseCreate
-sudo ln -s /opt/morseLab/eduMorseRunner.py /usr/bin/eduMorseRunner
+sudo cp -R ./morseLab /opt
+sudo ln -s /opt/eduMorse/eduMorseCreate.sh /usr/bin/eduMorseCreate
+sudo ln -s /opt/eduMorse/eduMorseRunner.py /usr/bin/eduMorseRunner
 sudo apt-get install -y scons
-cd /opt/morseLab/libraries/cBindings
+cd /opt/eduMorse/libraries/cBindings
 scons
 scons -c
 
@@ -38,4 +38,4 @@ morse check
 # Setting the environment variables
 echo "# MORSELAB variables" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export MORSELABPATH=/opt/morseLab" >> $HOME/.bashrc
+echo "export MORSELABPATH=/opt/eduMorse" >> $HOME/.bashrc
