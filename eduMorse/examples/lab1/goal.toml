@@ -1,0 +1,58 @@
+# hit the ball to gain points
+# if the robot hits the cube, it wins the game
+
+[game]
+	numrobot = 1
+	numobject = 3
+	map = "simple_square"
+	actuators = ["MotionVW", "Keyboard"]
+	sensors = ["Pose"]
+	[[game.objects]]
+		file = "cube"
+		name = "cube"
+		x = -5
+		y = -6
+		z = 0
+		[game.objects.properties]
+			Label = "cube"
+			GOAL = true
+	[[game.objects]]
+		file = "ball"
+		name = "BALL1"
+		x = 1
+		y = 1
+		z = 1
+		[game.objects.properties]
+			Label = "BALL"
+			Object = true
+	[[game.objects]]
+		file = "ball"
+		name = "BALL2"
+		x = 2
+		y = 2
+		z = 2
+		[game.objects.properties]
+			Label = "BALL"
+			Object = true
+	[[game.camera_position]]
+		x_cam = -18.0
+		y_cam = -6.7
+		z_cam = 10.8
+		p_cam = 1.09
+		q_cam = 0
+		r_cam = -1.14
+	[[game.robot_position]]
+		x = 7
+		y = 7
+		z = 0
+		p = 0
+		q = 0
+		r = 3.14
+	[game.time]
+		timeSimu = 30
+		scoreZero = false
+		endTime = true
+	[game.initScore]
+		k = 0
+		initialScore = 0
+		stopFlag = false
