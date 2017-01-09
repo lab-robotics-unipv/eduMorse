@@ -38,4 +38,4 @@ morse check
 # Setting the environment variables
 echo "# MORSELAB variables" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export MORSELABPATH=/opt/eduMorse" >> $HOME/.bashrc
+echo "export EDUMORSEPATH=/opt/eduMorse" >> $HOME/.bashrc
