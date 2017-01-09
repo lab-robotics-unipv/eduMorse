@@ -1,0 +1,17 @@
+[layer]
+	[[layer.score]]
+		obj = "BALL1"
+		score = -10
+		stop = false
+	[[layer.score]]
+		obj = "BALL2"
+		score = -10
+		stop = false
+	[[layer.score]]
+		obj = "Wall"
+		score = -10
+		stop = false
+	[[layer.score]]
+		obj = "cube"
+		score = 100
+		stop = true
