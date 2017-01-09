@@ -82,8 +82,8 @@ PORT = 50001
 HOSTSERVER = 'localhost'
 PORTSERVER = 4001
 MORSECONFIGPATH = os.path.join(os.environ['HOME'], '.morse/')
-MORSELABPATH = os.environ.get("MORSELABPATH")
-GAMESPATH = os.path.join(MORSELABPATH, "games")
+EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
+GAMESPATH = os.path.join(EDUMORSEPATH, "games")
 
 if __name__ == '__main__':
 
