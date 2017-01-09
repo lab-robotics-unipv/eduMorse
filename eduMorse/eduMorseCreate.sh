@@ -8,5 +8,5 @@ else
 	rm default.py
 	rm -r scripts/
 	rm -r src/
-	cp -r /opt/morseLab/test_toml/* .
+	cp -r /opt/eduMorse/test_toml/* .
 fi

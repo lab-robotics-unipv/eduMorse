@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo cp -R ./morseLab /opt
+sudo cp -R ./eduMorse /opt
 sudo ln -s /opt/eduMorse/eduMorseCreate.sh /usr/bin/eduMorseCreate
 sudo ln -s /opt/eduMorse/eduMorseRunner.py /usr/bin/eduMorseRunner
 sudo apt-get install -y scons
@@ -38,4 +38,4 @@ morse check
 # Setting the environment variables
 echo "# MORSELAB variables" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
-echo "export MORSELABPATH=/opt/eduMorse" >> $HOME/.bashrc
+echo "export EDUMORSEPATH=/opt/eduMorse" >> $HOME/.bashrc
