@@ -5,9 +5,9 @@ import subprocess
 import sys
 import time
 
-MORSELABPATH = os.environ.get("MORSELABPATH")
-SERVERPATH = os.path.join(MORSELABPATH, "socket")
-SCOREPATH = os.path.join(MORSELABPATH, "score")
+EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
+SERVERPATH = os.path.join(EDUMORSEPATH, "socket")
+SCOREPATH = os.path.join(EDUMORSEPATH, "score")
 
 if len(sys.argv) != 2:
 	print("Wrong number of parameters")

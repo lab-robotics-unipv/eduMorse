@@ -35,8 +35,8 @@ def main():
 	############################################################
 
 	PWD = os.path.dirname(os.path.abspath(__file__))
-	MORSELABPATH = os.environ.get("MORSELABPATH")
-	GAMESPATH = os.path.join(MORSELABPATH, "games")
+	EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
+	GAMESPATH = os.path.join(EDUMORSEPATH, "games")
 	MAPSPATH = os.path.join(GAMESPATH, "maps")
 	OBJECTSPATH = os.path.join(GAMESPATH, "objects")
 	ROBOTSPATH = os.path.join(GAMESPATH, "robots")
