@@ -2,8 +2,8 @@
 import os
 
 env = Environment()
-MORSELABPATH = os.environ.get("MORSELABPATH")
-CBINDINGSPATH = os.path.join(MORSELABPATH, "libraries/cBindings")
+EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
+CBINDINGSPATH = os.path.join(EDUMORSEPATH, "libraries/cBindings")
 env.Append(LIBPATH=CBINDINGSPATH)
 env.Append(CPPPATH=CBINDINGSPATH)
 
