@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo cp -R ./morseLab /opt
+sudo cp -R ./eduMorse /opt
 sudo ln -s /opt/eduMorse/eduMorseCreate.sh /usr/bin/eduMorseCreate
 sudo ln -s /opt/eduMorse/eduMorseRunner.py /usr/bin/eduMorseRunner
 sudo apt-get install -y scons
