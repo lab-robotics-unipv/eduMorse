@@ -4,7 +4,7 @@
 [game]
 	numrobot = 1
 	numobject = 3
-	map = "tutorial"
+	map = "simple_square"
 	actuators = ["MotionVW", "Keyboard"]
 	sensors = ["Pose"]
 	[[game.objects]]
