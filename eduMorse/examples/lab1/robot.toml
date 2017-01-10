@@ -17,6 +17,26 @@
 		type = 'Pose'
 		[robot.sensors.interface]
 			type = 'socket'
+	[[robot.sensors]]
+		id = 'IR1'
+		type = 'Infrared'
+		[robot.sensors.interface]
+			type = 'socket'
+	[[robot.sensors]]
+		id = 'IR2'
+		type = 'Infrared'
+		[robot.sensors.interface]
+			type = 'socket'
+	[[robot.sensors]]
+		id = 'IR3'
+		type = 'Infrared'
+		[robot.sensors.interface]
+			type = 'socket'
+	[[robot.sensors]]
+		id = 'IR4'
+		type = 'Infrared'
+		[robot.sensors.interface]
+			type = 'socket'
 	[[robot.collision]]
 		zTran = 0.3
 		x = 0.8
