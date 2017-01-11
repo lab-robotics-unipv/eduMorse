@@ -20,7 +20,7 @@
 	[[robot.sensors]]
 		id = 'ir1'
 		type = 'Infrared'
-		x = 0.1
+		x = 0.2
 		y = 0.0
 		z = 0.05
 		q = 0.0
@@ -29,17 +29,17 @@
 	[[robot.sensors]]
 		id = 'ir2'
 		type = 'Infrared'
-		x = 0.1
-		y = 0.0
-		z = 0.05
+		x = 0.2
+		y = -0.05
+		z = 0.5
 		q = 0.0
 		[robot.sensors.interface]
 			type = 'socket'
 	[[robot.sensors]]
 		id = 'ir3'
 		type = 'Infrared'
-		x = 0.1
-		y = 0.0
+		x = 0.2
+		y = 0.05
 		z = 0.05
 		q = 0.0
 		[robot.sensors.interface]
@@ -47,10 +47,10 @@
 	[[robot.sensors]]
 		id = 'ir4'
 		type = 'Infrared'
-		x = 0.1
+		x = 0.2
 		y = 0.0
 		z = 0.05
-		q = 0.0
+		q = 180.0
 		[robot.sensors.interface]
 			type = 'socket'
 	[[robot.collision]]
