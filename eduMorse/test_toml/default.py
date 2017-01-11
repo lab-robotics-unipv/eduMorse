@@ -124,6 +124,9 @@ def main():
 							if iprop:
 								actuator.add_interface(itype, **iprop)
 							actuator.add_interface(itype)
+                                                actuator.translate(act.get('x', 0.0), act.get('y', 0.0), act.get('z', 0.0))
+                                                actuator.rotate(act.get('p', 0.0), act.get('q', 0.0), act.get('r', 0.0))
+
 						robot.append(actuator)
 						aes.append(act['id'])
 					else:
@@ -145,7 +148,10 @@ def main():
 							if iprop:
 								sensor.add_interface(itype, **iprop)
 							sensor.add_interface(itype)
-						robot.append(sensor)
+                                                sensor.translate(sens.get('x', 0.0), sens.get('y', 0.0), sens.get('z', 0.0))
+                                                sensor.rotate(sens.get('p', 0.0), sens.get('q', 0.0), sens.get('r', 0.0))
+						
+                                                robot.append(sensor)
 						aes.append(sens['id'])
 					else:
 						raise Exception('Sensor type not allowed in this game')
