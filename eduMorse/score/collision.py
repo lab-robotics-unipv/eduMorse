@@ -38,7 +38,7 @@ class count:
                     objs.append(o)
 
 
-                    self.obj[o]['timestamp'] = data["timestamp"] # timestamp is registered every time
+                self.obj[o]['timestamp'] = data["timestamp"] # timestamp is registered every time
             self.send(self.x, objs, self.socket)
 
 HOST = ''
