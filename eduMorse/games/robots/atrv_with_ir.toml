@@ -23,7 +23,7 @@
 		[robot.sensors.interface]
 			type = 'socket'
 		[robot.sensor.properties]
-			track = "GOAL"
+			Track = "GOAL"
 	[[robot.sensors]]
 		id = 'ir1'
 		type = 'Infrared'
