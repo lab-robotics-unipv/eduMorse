@@ -38,3 +38,19 @@
 		k = 0
 		initialScore = 0
 		stopFlag = false
+	[[layer.score]]
+		obj = "BALL1"
+		score = 10
+		stop = false
+	[[layer.score]]
+		obj = "BALL2"
+		score = 10
+		stop = false
+	[[layer.score]]
+		obj = "Wall"
+		score = -10
+		stop = false
+	[[layer.score]]
+		obj = "target"
+		score = 100
+		stop = true
