@@ -6,7 +6,7 @@
 	numobject = 3
 	map = "simple_square"
 	actuators = ["MotionVW", "Keyboard"]
-	sensors = ["Pose"]
+	sensors = ["Pose", "Infrared"]
 	[[game.objects]]
 		file = "objects"
 		name = "GOAL"
