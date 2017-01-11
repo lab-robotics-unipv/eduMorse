@@ -1,5 +1,5 @@
 # hit the ball to gain points
-# if the robot hits the cube, it wins the game
+# if the robot hits the target, it wins the game
 
 [game]
 	numrobot = 1
@@ -31,9 +31,9 @@
 		q = 0
 		r = 3.14
 	[game.time]
-		timeSimu = 30
-		scoreZero = false
-		endTime = true
+		totalTime = 30
+		scoreUntilZeroPoints = false
+		scoreUntilNoTime = true
 	[game.initScore]
 		k = 0
 		initialScore = 0

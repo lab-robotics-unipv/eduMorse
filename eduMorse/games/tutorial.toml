@@ -49,9 +49,9 @@
 		q = 0
 		r = 0
 	[game.time]
-		timeSimu = 30
-		scoreZero = false
-		endTime = true
+		totalTime = 30
+		scoreUntilZeroPoints = false
+		scoreUntilNoTime = true
 	[game.initScore]
 		k = 0
 		initialScore = 0
