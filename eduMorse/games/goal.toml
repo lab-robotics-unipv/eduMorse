@@ -6,7 +6,7 @@
 	numobject = 3
 	map = "simple_square"
 	actuators = ["MotionVW", "Keyboard"]
-	sensors = ["Pose"]
+	sensors = ["Pose", "Infrared", "Proximity"]
 	[[game.objects]]
 		file = "target"
 		name = "target"
@@ -14,7 +14,7 @@
 		y = -6
 		z = 2.5
 		[game.objects.properties]
-			Label = "target"
+			Label = "GOAL"
 			GOAL = true
 	[[game.objects]]
 		file = "ball"

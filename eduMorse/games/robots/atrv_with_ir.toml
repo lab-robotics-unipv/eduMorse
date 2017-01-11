@@ -18,6 +18,13 @@
 		[robot.sensors.interface]
 			type = 'socket'
 	[[robot.sensors]]
+		id = 'prox'
+		type = 'Proximity'
+		[robot.sensors.interface]
+			type = 'socket'
+		[robot.sensor.properties]
+			track = "GOAL"
+	[[robot.sensors]]
 		id = 'ir1'
 		type = 'Infrared'
 		x = 0.3
