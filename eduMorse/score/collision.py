@@ -60,7 +60,7 @@ if __name__ == '__main__':
 				l[x] = count(x, conn)
 
 			for x in robots.keys():
-				simu.__dict__[x].collision.subscribe(l[x].counter)
+				simu.__dict__[x].eduMorse_default_collision_sensor.subscribe(l[x].counter)
 
 			#print("Press ctrl+C to stop")
 			while True:

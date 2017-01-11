@@ -19,13 +19,13 @@ def findFileInPath(filename, extension, paths):
 	raise FileNotFoundError('File ' + filename + ' not found')
 
 
-def addCollisionToRobot(robot, s):
-	collision = Collision()
-	collision.translate(0, 0, s[0])
-	collision.scale = (s[1], s[2], s[3])
-	collision.frequency(3)
-	collision.add_interface("socket")
-	robot.append(collision)
+def addEduMorseDefaultCollisionToRobot(robot, s):
+	eduMorse_default_collision_sensor = Collision()
+	eduMorse_default_collision_sensor.translate(0, 0, s[0])
+	eduMorse_default_collision_sensor.scale = (s[1], s[2], s[3])
+	eduMorse_default_collision_sensor.frequency(3)
+	eduMorse_default_collision_sensor.add_interface("socket")
+	robot.append(eduMorse_default_collision_sensor)
 
 
 def main():
@@ -106,7 +106,7 @@ def main():
 						display = True
 
 				aes = []  # actuators and sensors
-				aes.append('collision')
+				aes.append('eduMorse_default_collision_sensor')
 
 				for act in rob['actuators']:
 					if act['id'] in aes:
@@ -156,8 +156,8 @@ def main():
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				for c in rob['collision']:
-					addCollisionToRobot(robot, [c['zTran'], c['x'], c['y'], c['z']])
+				for c in rob['eduMorseCollision']:
+					addEduMorseDefaultCollisionToRobot(robot, [c['zTran'], c['x'], c['y'], c['z']])
 
 				pos = positions.pop(0)
 				robot.translate(pos['x'], pos['y'], pos['z'])
