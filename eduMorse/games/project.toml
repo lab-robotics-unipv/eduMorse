@@ -4,7 +4,7 @@
 [game]
 	numrobot = 1
 	numobject = 3
-	map = "simple_square"
+	map = "square_maze_medium"
 	actuators = ["MotionVW", "Keyboard"]
 	sensors = ["Pose", "Infrared", "Proximity"]
 	[[game.objects]]
@@ -16,24 +16,6 @@
 		[game.objects.properties]
 			Label = "GOAL"
 			GOAL = true
-	[[game.objects]]
-		file = "ball"
-		name = "BALL1"
-		x = 1
-		y = 1
-		z = 1
-		[game.objects.properties]
-			Label = "BALL"
-			Object = true
-	[[game.objects]]
-		file = "ball"
-		name = "BALL2"
-		x = 2
-		y = 2
-		z = 2
-		[game.objects.properties]
-			Label = "BALL"
-			Object = true
 	[[game.camera_position]]
 		x_cam = -18.0
 		y_cam = -6.7

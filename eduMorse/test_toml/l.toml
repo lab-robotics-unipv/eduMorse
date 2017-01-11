@@ -15,3 +15,7 @@
 		obj = "cube"
 		score = 100
 		stop = true
+	[[layer.score]]
+		obj = "target"
+		score = 100
+		stop = true
