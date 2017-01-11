@@ -8,13 +8,13 @@
 	actuators = ["MotionVW", "Keyboard"]
 	sensors = ["Pose"]
 	[[game.objects]]
-		file = "cube"
-		name = "cube"
+		file = "target"
+		name = "target"
 		x = -5
 		y = -6
-		z = 0
+		z = 2.5
 		[game.objects.properties]
-			Label = "cube"
+			Label = "target"
 			GOAL = true
 	[[game.objects]]
 		file = "ball"
