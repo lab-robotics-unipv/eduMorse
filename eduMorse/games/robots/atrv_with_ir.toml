@@ -22,7 +22,7 @@
 		type = 'Proximity'
 		[robot.sensors.interface]
 			type = 'socket'
-		[robot.sensor.properties]
+		[robot.sensors.properties]
 			Track = "GOAL"
 	[[robot.sensors]]
 		id = 'ir1'
