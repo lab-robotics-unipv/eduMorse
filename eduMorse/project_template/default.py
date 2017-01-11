@@ -46,7 +46,7 @@ def main():
 	############################################################
 
 	# Open and load the local file containing the configuration of the simulation
-	with open(os.path.join(PWD, "g.toml"), 'r') as gfile:
+	with open(os.path.join(PWD, "simulation.toml"), 'r') as gfile:
 		simulation = toml.loads(gfile.read())
 
 		# Check if game file exists and load it
@@ -124,8 +124,8 @@ def main():
 							if iprop:
 								actuator.add_interface(itype, **iprop)
 							actuator.add_interface(itype)
-                                                actuator.translate(act.get('x', 0.0), act.get('y', 0.0), act.get('z', 0.0))
-                                                actuator.rotate(act.get('p', 0.0), act.get('q', 0.0), act.get('r', 0.0))
+						actuator.translate(act.get('x', 0.0), act.get('y', 0.0), act.get('z', 0.0))
+						actuator.rotate(act.get('p', 0.0), act.get('q', 0.0), act.get('r', 0.0))
 
 						robot.append(actuator)
 						aes.append(act['id'])
@@ -148,10 +148,10 @@ def main():
 							if iprop:
 								sensor.add_interface(itype, **iprop)
 							sensor.add_interface(itype)
-                                                sensor.translate(sens.get('x', 0.0), sens.get('y', 0.0), sens.get('z', 0.0))
-                                                sensor.rotate(sens.get('p', 0.0), sens.get('q', 0.0), sens.get('r', 0.0))
-						
-                                                robot.append(sensor)
+						sensor.translate(sens.get('x', 0.0), sens.get('y', 0.0), sens.get('z', 0.0))
+						sensor.rotate(sens.get('p', 0.0), sens.get('q', 0.0), sens.get('r', 0.0))
+
+						robot.append(sensor)
 						aes.append(sens['id'])
 					else:
 						raise Exception('Sensor type not allowed in this game')

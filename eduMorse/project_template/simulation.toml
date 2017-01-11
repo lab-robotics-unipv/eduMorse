@@ -2,7 +2,7 @@
 	name = "tutorial"
 	fastmode = false
 	[[game.robot]]
-		file = "r"
+		file = "robot"
 		name = "robot"
 	[[game.camera_position]]
 		robot = "robot"
