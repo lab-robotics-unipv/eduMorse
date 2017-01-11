@@ -119,24 +119,24 @@ if __name__ == '__main__':
 					robots[x]['stop'] = False
 
 				# Open and load the local file containing the configuration of the simulation
-				with open(os.path.join(SIMUPATH, "g.toml"), 'r') as gfile:
-					simulation = toml.loads(gfile.read())
+				with open(os.path.join(SIMUPATH, "simulation.toml"), 'r') as simulation_file:
+					simulation = toml.loads(simulation_file.read())
 
-					#Check if game file exists and load it
-					game_name = simulation['game']['name']
+					#Check if rulese file exists and load it
+					rules_name = simulation['simulation']['name']
 					try:
-						game_name = findFileInPath(game_name, 'toml', [SIMUPATH, GAMESPATH])
+						rules_name = findFileInPath(rules_name, 'toml', [SIMUPATH, GAMESPATH])
 					except:
 						raise
 
-				with open(game_name, 'r') as gamefile:
-					game = toml.loads(gamefile.read())
+				with open(rules_name, 'r') as rules_file:
+					rules = toml.loads(rules_file.read())
 
-					totalTime = game['game']['time']['totalTime']
-					scoreUntilZeroPoints = game['game']['time']['scoreUntilZeroPoints']
-					scoreUntilNoTime = game['game']['time']['scoreUntilNoTime']
+					totalTime = rules['simulation']['time']['totalTime']
+					scoreUntilZeroPoints = rules['simulation']['time']['scoreUntilZeroPoints']
+					scoreUntilNoTime = rules['simulation']['time']['scoreUntilNoTime']
 
-					init = game['game'].get('initScore', {})
+					init = rules['simulation'].get('initScore', {})
 					k = init.get('k', 0)
 					initialScore = init.get('initialScore', 0)
 					stopFlag = init.get('stopFlag', False)
