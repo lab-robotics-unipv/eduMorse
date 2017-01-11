@@ -49,7 +49,7 @@ def main():
 	with open(os.path.join(PWD, "simulation.toml"), 'r') as simulation_file:
 		simulation = toml.loads(simulation_file.read())
 
-		# Check if game file exists and load it
+		# Check if rules file exists and load it
 		rules_name = simulation['simulation']['name']
 		try:
 			rules_name = findFileInPath(rules_name, 'toml', [PWD, GAMESPATH])
