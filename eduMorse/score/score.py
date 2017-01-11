@@ -122,7 +122,7 @@ if __name__ == '__main__':
 				with open(os.path.join(SIMUPATH, "simulation.toml"), 'r') as simulation_file:
 					simulation = toml.loads(simulation_file.read())
 
-					#Check if rulese file exists and load it
+					#Check if rules file exists and load it
 					rules_name = simulation['simulation']['name']
 					try:
 						rules_name = findFileInPath(rules_name, 'toml', [SIMUPATH, GAMESPATH])
