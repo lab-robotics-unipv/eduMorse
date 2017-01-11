@@ -132,9 +132,9 @@ if __name__ == '__main__':
 				with open(game_name, 'r') as gamefile:
 					game = toml.loads(gamefile.read())
 
-					timeSimu = game['game']['time']['timeSimu']
-					scoreZero = game['game']['time']['scoreZero']
-					endTime = game['game']['time']['endTime']
+					totalTime = game['game']['time']['totalTime']
+					scoreUntilZeroPoints = game['game']['time']['scoreUntilZeroPoints']
+					scoreUntilNoTime = game['game']['time']['scoreUntilNoTime']
 
 					init = game['game'].get('initScore', {})
 					k = init.get('k', 0)
@@ -142,16 +142,16 @@ if __name__ == '__main__':
 					stopFlag = init.get('stopFlag', False)
 
 				if len(sys.argv) == 5:
-					timeSimu = strToInt(sys.argv[2])
-					endTime = strToBool(sys.argv[3])
-					scoreZero = strToBool(sys.argv[4])
+					totalTime = strToInt(sys.argv[2])
+					scoreUntilNoTime = strToBool(sys.argv[3])
+					scoreUntilZeroPoints = strToBool(sys.argv[4])
 
 				timeLeft = 1
 				try:
-					while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+					while not ((scoreUntilNoTime and timeLeft <= 0) or (scoreUntilZeroPoints and max([i['score'] for i in robots.values()]) <= 0)):
 						print('\033[H\033[2J')
 						diffStartTime = time.time() - startTime
-						timeLeft = timeSimu - diffStartTime
+						timeLeft = totalTime - diffStartTime
 						while messageInSocket(s):
 							message = receive(s)
 							point = message.split('.')
