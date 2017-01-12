@@ -86,8 +86,6 @@ EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
 GAMESPATH = os.path.join(EDUMORSEPATH, "games")
 
 if __name__ == '__main__':
-
-<<<<<<< HEAD
     if len(sys.argv) != 2 and len(sys.argv) != 5:
         raise Exception('Wrong number of parameters')
 
