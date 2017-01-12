@@ -60,7 +60,7 @@
 		r = 3.14
 		[robot.sensors.interface]
 			type = 'socket'
-	[[robot.collision]]
+	[[robot.eduMorseCollision]]
 		zTran = 0.3
 		x = 0.8
 		y = 0.6
