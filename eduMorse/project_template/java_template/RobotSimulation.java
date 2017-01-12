@@ -9,9 +9,9 @@ import java.util.logging.Logger;
  * @author daniele
  */
 public class RobotSimulation {
-    
+
     private Robot robot;
-    
+
     public RobotSimulation() {
         try {
             // Import a new robot with "robot" as name
@@ -20,7 +20,7 @@ public class RobotSimulation {
             Logger.getLogger(RobotSimulation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void run() {
         robot.run();
     }
@@ -29,10 +29,10 @@ public class RobotSimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         // Start a new simulation
         RobotSimulation RS = new RobotSimulation();
         RS.run();
     }
-    
+
 }
