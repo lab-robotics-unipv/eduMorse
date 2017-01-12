@@ -48,7 +48,7 @@
 		x = 0.3
 		y = 0.1
 		z = 0.1
-		r = 1.047
+		r = -1.047
 		[robot.sensors.interface]
 			type = 'socket'
 	[[robot.sensors]]
