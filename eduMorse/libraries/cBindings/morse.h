@@ -26,14 +26,14 @@ typedef struct proxObject {
 
 typedef struct proxMeas {
     double time;
-    
+
     proxObject * objects;
     int numObj;
 } proxMeas;
 
 typedef struct irMeas {
     double time;
-    
+
     double * dist;
     int numP;
 } irMeas;
