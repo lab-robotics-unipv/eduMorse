@@ -16,7 +16,7 @@ int main() {
     int sock;
     sock = client_doSock(address, serverPort);
     if ( sock == -1) {
-        printf("Errore 1\n");
+        printf("Error 1\n");
         return 1;
     }
     FILE * f = fdopen(sock, "r+");
@@ -24,7 +24,7 @@ int main() {
     // Set the robot linear and angular speed
     int flag = setSpeed(f, parent, "motion", 1, 0);
     if ( flag < 0 ) {
-        printf("Errore 2\n");
+        printf("Error 2\n");
         fclose(f);
         return 2;
     }
@@ -33,7 +33,7 @@ int main() {
     Pose pose;
     flag = getPose(f, parent, "pose", &pose);
     if ( flag < 0 ) {
-        printf("Errore 3\n");
+        printf("Error 3\n");
         fclose(f);
         return 2;
     }
@@ -42,7 +42,7 @@ int main() {
     proxMeas proxmeas;
     flag = getProx(f, parent, "prox", &proxmeas);
     if ( flag < 0 ) {
-        printf("Errore 5\n");
+        printf("Error 5\n");
         fclose(f);
         return 3;
     }
@@ -51,7 +51,7 @@ int main() {
     irMeas irmeas1;
     flag = getIR(f, parent, "IR1", &irmeas1);
     if ( flag < 0 ) {
-        printf("Errore 4\n");
+        printf("Error 4\n");
         fclose(f);
         return 3;
     }
@@ -60,7 +60,7 @@ int main() {
     irMeas irmeas2;
     flag = getIR(f, parent, "IR2", &irmeas2);
     if ( flag < 0 ) {
-        printf("Errore 4\n");
+        printf("Error 4\n");
         fclose(f);
         return 3;
     }
@@ -69,7 +69,7 @@ int main() {
     irMeas irmeas3;
     flag = getIR(f, parent, "IR3", &irmeas3);
     if ( flag < 0 ) {
-        printf("Errore 4\n");
+        printf("Error 4\n");
         fclose(f);
         return 3;
     }
@@ -78,7 +78,7 @@ int main() {
     irMeas irmeas4;
     flag = getIR(f, parent, "IR4", &irmeas4);
     if ( flag < 0 ) {
-        printf("Errore 4\n");
+        printf("Error 4\n");
         fclose(f);
         return 3;
     } 

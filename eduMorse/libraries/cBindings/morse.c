@@ -41,7 +41,7 @@ int getPose(FILE * sock, char* parent, char* name, Pose * pose) {
     ssize_t written = fprintf(sock, "%s", req);
     if (written < 0)
         return -1;
-   
+
     char * buff = NULL;
     size_t len = 0;
     ssize_t red = getline(&buff, &len, sock);
@@ -120,7 +120,7 @@ int parsePoseJson(char * json, Pose * pose) {
     s += len+1;
 
     int n;
-    
+
     cJSON * JS = cJSON_Parse(s);
     cJSON * JSchild = JS->child;
     while ( JSchild != NULL ) {
@@ -214,7 +214,7 @@ int parseProxJson(char * json, proxMeas * proxM) {
     s += len+1;
 
     int n;
-    
+
     cJSON * JS = cJSON_Parse(s);
     cJSON * JSchild = JS->child;
     while ( JSchild != NULL ) {
