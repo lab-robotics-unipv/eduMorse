@@ -40,11 +40,11 @@ Check your system requirements and find other informations about Morse simulator
 - pytoml
 
 ### Directory diagram  
-After the installation new files are added in _/opt_. At the top of directory hierarchy there is _morseLab_ folder, it contains:  
+After the installation new files are added in _/opt_. At the top of directory hierarchy there is _eduMorse_ folder, it contains:  
 - games -> blend files for maps and objects, conf files for games and robots
 - libraries -> C and Java libraries to support programming in these languages
 - score -> scripts to count score and collisions, a layer manages communication between them
 - socket -> client-server communication
-- test_toml -> configuration files (TOML format) to set a simulation, main function in C and Java, example of Python script to control a robot
+- project_template -> configuration files (TOML format) to set a simulation, main function in C and Java, example of Python script to control a robot
 
 See [directory diagram](https://github.com/danieledema/eduMorse/wiki/Directory-structure).

@@ -19,13 +19,13 @@ def findFileInPath(filename, extension, paths):
 	raise FileNotFoundError('File ' + filename + ' not found')
 
 
-def addCollisionToRobot(robot, s):
-	collision = Collision()
-	collision.translate(0, 0, s[0])
-	collision.scale = (s[1], s[2], s[3])
-	collision.frequency(3)
-	collision.add_interface("socket")
-	robot.append(collision)
+def addEduMorseDefaultCollisionToRobot(robot, s):
+	eduMorse_default_collision_sensor = Collision()
+	eduMorse_default_collision_sensor.translate(0, 0, s[0])
+	eduMorse_default_collision_sensor.scale = (s[1], s[2], s[3])
+	eduMorse_default_collision_sensor.frequency(3)
+	eduMorse_default_collision_sensor.add_interface("socket")
+	robot.append(eduMorse_default_collision_sensor)
 
 
 def main():
@@ -46,24 +46,24 @@ def main():
 	############################################################
 
 	# Open and load the local file containing the configuration of the simulation
-	with open(os.path.join(PWD, "g.toml"), 'r') as gfile:
-		simulation = toml.loads(gfile.read())
+	with open(os.path.join(PWD, "simulation.toml"), 'r') as simulation_file:
+		simulation = toml.loads(simulation_file.read())
 
-		# Check if game file exists and load it
-		game_name = simulation['game']['name']
+		# Check if rules file exists and load it
+		rules_name = simulation['simulation']['name']
 		try:
-			game_name = findFileInPath(game_name, 'toml', [PWD, GAMESPATH])
+			rules_name = findFileInPath(rules_name, 'toml', [PWD, GAMESPATH])
 		except:
 			raise
 
-		with open(game_name) as gamefile:
-			game = toml.loads(gamefile.read())
+		with open(rules_name) as rules_file:
+			rules = toml.loads(rules_file.read())
 
 
 			# Control if any robot file exists and collect them in a list
-			num_robot = game['game']['numrobot']
+			num_robot = rules['simulation']['numrobot']
 			robot_file_list = []
-			for robot_file in simulation['game']['robot']:
+			for robot_file in simulation['simulation']['robot']:
 				try:
 					rf = findFileInPath(robot_file['file'], 'toml', [PWD, ROBOTSPATH])
 				except:
@@ -89,14 +89,14 @@ def main():
 			# ROBOT CONFIGURATION
 			############################################################
 
-			positions = list(game['game']['robot_position'])
+			positions = list(rules['simulation']['robot_position'])
 			display = False
 
 			for robot_config in config:
 				rob = robot_config[1]['robot']
 				robot = eval(rob['type'] + '()')
 				robot.name = robot_config[0]
-				for cam in simulation['game']['camera_position']:
+				for cam in simulation['simulation']['camera_position']:
 					if robot.name == cam['robot']:
 						camera = VideoCamera()
 						camera.translate(cam['x_cam'], cam['y_cam'], cam['z_cam'])
@@ -106,12 +106,12 @@ def main():
 						display = True
 
 				aes = []  # actuators and sensors
-				aes.append('collision')
+				aes.append('eduMorse_default_collision_sensor')
 
 				for act in rob['actuators']:
 					if act['id'] in aes:
 						raise Exception('Error: actuator id is not unique')
-					if act['type'] in game['game']['actuators']:
+					if act['type'] in rules['simulation']['actuators']:
 						actuator = eval(act['type'] + '()')
 						actuator.name = act['id']
 						p = act.get('properties', None)
@@ -124,8 +124,8 @@ def main():
 							if iprop:
 								actuator.add_interface(itype, **iprop)
 							actuator.add_interface(itype)
-                                                actuator.translate(act.get('x', 0.0), act.get('y', 0.0), act.get('z', 0.0))
-                                                actuator.rotate(act.get('p', 0.0), act.get('q', 0.0), act.get('r', 0.0))
+						actuator.translate(act.get('x', 0.0), act.get('y', 0.0), act.get('z', 0.0))
+						actuator.rotate(act.get('p', 0.0), act.get('q', 0.0), act.get('r', 0.0))
 
 						robot.append(actuator)
 						aes.append(act['id'])
@@ -135,7 +135,7 @@ def main():
 				for sens in rob['sensors']:
 					if sens['id'] in aes:
 						raise Exception('Error: sensor id is not unique')
-					if sens['type'] in game['game']['sensors']:
+					if sens['type'] in rules['simulation']['sensors']:
 						sensor = eval(sens['type'] + '()')
 						sensor.name = sens['id']
 						p = sens.get('properties', None)
@@ -148,16 +148,16 @@ def main():
 							if iprop:
 								sensor.add_interface(itype, **iprop)
 							sensor.add_interface(itype)
-                                                sensor.translate(sens.get('x', 0.0), sens.get('y', 0.0), sens.get('z', 0.0))
-                                                sensor.rotate(sens.get('p', 0.0), sens.get('q', 0.0), sens.get('r', 0.0))
-						
-                                                robot.append(sensor)
+						sensor.translate(sens.get('x', 0.0), sens.get('y', 0.0), sens.get('z', 0.0))
+						sensor.rotate(sens.get('p', 0.0), sens.get('q', 0.0), sens.get('r', 0.0))
+
+						robot.append(sensor)
 						aes.append(sens['id'])
 					else:
 						raise Exception('Sensor type not allowed in this game')
 
-				for c in rob['collision']:
-					addCollisionToRobot(robot, [c['zTran'], c['x'], c['y'], c['z']])
+				for c in rob['eduMorseCollision']:
+					addEduMorseDefaultCollisionToRobot(robot, [c['zTran'], c['x'], c['y'], c['z']])
 
 				pos = positions.pop(0)
 				robot.translate(pos['x'], pos['y'], pos['z'])
@@ -168,9 +168,9 @@ def main():
 			# OBJECT CONFIGURATION
 			############################################################
 
-			num_object = game['game']['numobject']
+			num_object = rules['simulation']['numobject']
 			objects = []
-			for o in game['game']['objects']:
+			for o in rules['simulation']['objects']:
 				try:
 					object_file = findFileInPath(o['file'], 'blend', [PWD, OBJECTSPATH])
 				except:
@@ -198,17 +198,17 @@ def main():
 			############################################################
 
 			# Check if map file exists
-			game_map = game['game']['map']
+			game_map = rules['simulation']['map']
 			try:
 				game_map = findFileInPath(game_map, 'blend', [PWD, MAPSPATH])
 			except:
 				raise
 
-			fmode = simulation['game']['fastmode']
+			fmode = simulation['simulation']['fastmode']
 
 			env = Environment(game_map, fastmode = fmode)
 
-			for cam in game['game']['camera_position']:
+			for cam in rules['simulation']['camera_position']:
 				env.set_camera_location([cam['x_cam'], cam['y_cam'], cam['z_cam']])
 				env.set_camera_rotation([cam['p_cam'], cam['q_cam'], cam['r_cam']])
 

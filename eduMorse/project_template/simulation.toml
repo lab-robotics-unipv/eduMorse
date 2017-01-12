@@ -1,10 +1,10 @@
-[game]
+[simulation]
 	name = "tutorial"
 	fastmode = false
-	[[game.robot]]
-		file = "r"
+	[[simulation.robot]]
+		file = "robot"
 		name = "robot"
-	[[game.camera_position]]
+	[[simulation.camera_position]]
 		robot = "robot"
 		x_cam = 0.5
 		y_cam = 0

@@ -119,39 +119,39 @@ if __name__ == '__main__':
 					robots[x]['stop'] = False
 
 				# Open and load the local file containing the configuration of the simulation
-				with open(os.path.join(SIMUPATH, "g.toml"), 'r') as gfile:
-					simulation = toml.loads(gfile.read())
+				with open(os.path.join(SIMUPATH, "simulation.toml"), 'r') as simulation_file:
+					simulation = toml.loads(simulation_file.read())
 
-					#Check if game file exists and load it
-					game_name = simulation['game']['name']
+					#Check if rules file exists and load it
+					rules_name = simulation['simulation']['name']
 					try:
-						game_name = findFileInPath(game_name, 'toml', [SIMUPATH, GAMESPATH])
+						rules_name = findFileInPath(rules_name, 'toml', [SIMUPATH, GAMESPATH])
 					except:
 						raise
 
-				with open(game_name, 'r') as gamefile:
-					game = toml.loads(gamefile.read())
+				with open(rules_name, 'r') as rules_file:
+					rules = toml.loads(rules_file.read())
 
-					timeSimu = game['game']['time']['timeSimu']
-					scoreZero = game['game']['time']['scoreZero']
-					endTime = game['game']['time']['endTime']
+					totalTime = rules['simulation']['time']['totalTime']
+					scoreUntilZeroPoints = rules['simulation']['time']['scoreUntilZeroPoints']
+					scoreUntilNoTime = rules['simulation']['time']['scoreUntilNoTime']
 
-					init = game['game'].get('initScore', {})
+					init = rules['simulation'].get('initScore', {})
 					k = init.get('k', 0)
 					initialScore = init.get('initialScore', 0)
 					stopFlag = init.get('stopFlag', False)
 
 				if len(sys.argv) == 5:
-					timeSimu = strToInt(sys.argv[2])
-					endTime = strToBool(sys.argv[3])
-					scoreZero = strToBool(sys.argv[4])
+					totalTime = strToInt(sys.argv[2])
+					scoreUntilNoTime = strToBool(sys.argv[3])
+					scoreUntilZeroPoints = strToBool(sys.argv[4])
 
 				timeLeft = 1
 				try:
-					while not ((endTime and timeLeft <= 0) or (scoreZero and max([i['score'] for i in robots.values()]) <= 0)):
+					while not ((scoreUntilNoTime and timeLeft <= 0) or (scoreUntilZeroPoints and max([i['score'] for i in robots.values()]) <= 0)):
 						print('\033[H\033[2J')
 						diffStartTime = time.time() - startTime
-						timeLeft = timeSimu - diffStartTime
+						timeLeft = totalTime - diffStartTime
 						while messageInSocket(s):
 							message = receive(s)
 							point = message.split('.')
