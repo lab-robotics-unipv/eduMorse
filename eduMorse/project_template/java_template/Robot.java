@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robotsimulation;
+package java_template;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -122,7 +122,7 @@ public class Robot {
     }
 
     public void run() {
-        System.out.println("Robot partito");
+        System.out.println("Robot started");
 
         try {
             poseSens.sense();
