@@ -122,7 +122,7 @@ public class Robot {
     }
 
     public void run() {
-        System.out.println("Robot partito");
+        System.out.println("Robot started");
 
         try {
             poseSens.sense();
