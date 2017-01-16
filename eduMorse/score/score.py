@@ -27,12 +27,18 @@ def findSimuPath(simuName):
         return None
 
 
-def strToBool(s):
-    if s == 'True':
-        return True
-    if s == 'False':
-        return False
-    raise ValueError('Wrong input')
+def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
+    stopMode = stopMode.lower()
+    if stopMode == 'stopwhenzeropoints':
+        scoreUntilZeroPoints = True
+        scoreUntilNoTime = False
+        return [scoreUntilZeroPoints, scoreUntilNoTime]
+    elif stopMode == 'stopwhennotime':
+        scoreUntilZeroPoints = False
+        scoreUntilNoTime = True
+        return [scoreUntilZeroPoints, scoreUntilNoTime]
+    else:
+        raise ValueError("Wrong value in 'simulationStopMode'")
 
 
 def strToInt(s):
@@ -86,7 +92,7 @@ EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
 GAMESPATH = os.path.join(EDUMORSEPATH, "games")
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2 and len(sys.argv) != 5:
+    if len(sys.argv) != 2 and len(sys.argv) != 4:
         raise Exception('Wrong number of parameters')
 
     SIMUPATH = findSimuPath(sys.argv[1])
@@ -132,18 +138,30 @@ if __name__ == '__main__':
                     rules = toml.loads(rules_file.read())
 
                     totalTime = rules['simulation']['time']['totalTime']
-                    scoreUntilZeroPoints = rules['simulation']['time']['scoreUntilZeroPoints']
-                    scoreUntilNoTime = rules['simulation']['time']['scoreUntilNoTime']
+                    simulationStopMode = rules['simulation']['time']['simulationStopMode']
+                    scoreUntilZeroPoints = False
+                    scoreUntilNoTime = False
+                    try:
+                        stopMode = checkStopMode(simulationStopMode, scoreUntilZeroPoints, scoreUntilNoTime)
+                        scoreUntilZeroPoints = stopMode[0]
+                        scoreUntilNoTime = stopMode[1]
+                    except:
+                        raise
 
                     init = rules['simulation'].get('initScore', {})
                     k = init.get('k', 0)
                     initialScore = init.get('initialScore', 0)
                     stopFlag = init.get('stopFlag', False)
 
-                if len(sys.argv) == 5:
+                if len(sys.argv) == 4:
                     totalTime = strToInt(sys.argv[2])
-                    scoreUntilNoTime = strToBool(sys.argv[3])
-                    scoreUntilZeroPoints = strToBool(sys.argv[4])
+                    simulationStopMode = sys.argv[3]
+                    try:
+                        stopMode = checkStopMode(simulationStopMode, scoreUntilZeroPoints, scoreUntilNoTime)
+                        scoreUntilZeroPoints = stopMode[0]
+                        scoreUntilNoTime = stopMode[1]
+                    except:
+                        raise
 
                 timeLeft = 1
                 try:

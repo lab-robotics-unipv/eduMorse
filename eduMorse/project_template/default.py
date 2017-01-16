@@ -186,7 +186,8 @@ def main():
                     raise Exception('Error: object name is not unique')
                 obj = PassiveObject(i[0])
                 obj.name = i[1]['name']
-                obj.translate(i[1]['x'], i[1]['y'], i[1]['z'])
+                obj.translate(i[1].get('x', 0.0), i[1].get('y', 0.0), i[1].get('z', 0.0))
+                obj.rotate(i[1].get('p', 0.0), i[1].get('q', 0.0), i[1].get('r', 0.0))
                 p = i[1].get('properties', None)
                 if p:
                     obj.properties(**p)
