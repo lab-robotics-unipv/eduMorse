@@ -8,12 +8,12 @@ import time
 
 # control if a file exists
 def findFileInPath(filename, extension, paths):
-	for path in paths:
-		if os.path.exists(os.path.join(path, filename)):
-			return os.path.join(path, filename)
-		elif os.path.exists(os.path.join(path, filename + '.' + extension)):
-			return os.path.join(path, filename + '.' + extension)
-	raise FileNotFoundError('File ' + filename + ' not found')
+    for path in paths:
+        if os.path.exists(os.path.join(path, filename)):
+            return os.path.join(path, filename)
+        elif os.path.exists(os.path.join(path, filename + '.' + extension)):
+            return os.path.join(path, filename + '.' + extension)
+    raise FileNotFoundError('File ' + filename + ' not found')
 
 
 # find the path of a simulation starting from the simulation name

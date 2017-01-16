@@ -32,8 +32,7 @@
 		r = 3.14
 	[simulation.time]
 		totalTime = 30
-		scoreUntilZeroPoints = false
-		scoreUntilNoTime = true
+		simulationStopMode = "stopWhenNoTime"
 	[simulation.initScore]
 		k = 0
 		initialScore = 0
