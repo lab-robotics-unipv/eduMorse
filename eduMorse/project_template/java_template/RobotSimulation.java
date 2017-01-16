@@ -1,4 +1,4 @@
-package robotsimulation;
+package java_template;
 
 import java.io.IOException;
 import java.util.logging.Level;
