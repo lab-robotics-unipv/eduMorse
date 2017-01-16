@@ -10,8 +10,8 @@
 	[[simulation.objects]]
 		file = "target"
 		name = "target"
-		x = -5
-		y = -6
+		x = -6
+		y = 7
 		z = 0
 		[simulation.objects.properties]
 			Label = "GOAL"
@@ -25,7 +25,7 @@
 		r_cam = -1.14
 	[[simulation.robot_position]]
 		x = 7
-		y = 7
+		y = -7
 		z = 0
 		p = 0
 		q = 0
