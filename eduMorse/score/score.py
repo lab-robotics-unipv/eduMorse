@@ -47,15 +47,6 @@ def strToInt(s):
         raise
     return i
 
-def receive_old(conn):
-    data = b''
-    word = b''
-    while word != b'\x04':
-        data += word
-        word = conn.recv(1)
-    message = data.decode('utf-8')
-    return message
-
 def send_old(stringa, socket):
     message = stringa + '\x04'
     socket.sendall(message.encode('utf-8'))
@@ -178,11 +169,11 @@ if __name__ == '__main__':
                         diffStartTime = time.time() - startTime
                         timeLeft = totalTime - diffStartTime
                         while messageInSocket(s):
-                            message = receive_old(s)
-                            point = message.split('.')
-                            robot = point[0]
-                            score = point[1]
-                            stop = point[2]
+                            message = receive(s)
+                            for r in message.keys():
+                                robot = r
+                            score = message[robot]['score']
+                            stop = message[robot]['stop']
                             for x in robots.keys():
                                 if x == robot:
                                     robots[x]['collision'] += float(score)

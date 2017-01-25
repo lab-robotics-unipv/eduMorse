@@ -1,3 +1,4 @@
+import json
 import pytoml as toml
 import os
 import select
@@ -33,11 +34,14 @@ def receive(conn):
         data += word
         word = conn.recv(1)
     message = data.decode('utf-8')
+    message = json.loads(message)
     return message
 
 
 def send(robot, score, stop, socket):
-    message = robot + '.' + str(score) + '.' + str(stop) + '\x04'
+    message = {robot : {"score" : score, "stop" : stop}}
+    message = json.dumps(message)
+    message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
 
 
@@ -101,9 +105,9 @@ if __name__ == '__main__':
                                 pass
 
                             message = receive(s)
-                            parts = message.split('.')
-                            robot = parts[0]
-                            obj = parts[1:]
+                            for r in message.keys():
+                                robot = r
+                            obj = message[robot]
 
                             score = 0
                             stop = False
