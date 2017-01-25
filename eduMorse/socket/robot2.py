@@ -45,7 +45,7 @@ PORT = 4001
 if __name__ == '__main__':
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
-        send_old(robot_sender, s)
+        send(robot_sender, s)
         start = ''
         while 'Start' not in start:
             start = receive(s)

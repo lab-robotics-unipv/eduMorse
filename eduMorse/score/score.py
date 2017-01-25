@@ -47,10 +47,6 @@ def strToInt(s):
         raise
     return i
 
-def send_old(stringa, socket):
-    message = stringa + '\x04'
-    socket.sendall(message.encode('utf-8'))
-
 def receive(conn):
     data = b''
     word = b''
@@ -105,7 +101,7 @@ if __name__ == '__main__':
 
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socketServer:
                 socketServer.connect((HOSTSERVER, PORTSERVER)) # connect to server.py
-                send_old('SCORE', socketServer)
+                send('SCORE', socketServer)
 
                 start = ''
                 while 'Start' not in start:

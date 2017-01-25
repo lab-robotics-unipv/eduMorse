@@ -68,7 +68,7 @@ if __name__ == '__main__':
         i = 0
         while i < len(robots.keys()):
             conn, addr = s.accept()
-            robot = receive_old(conn)
+            robot = receive(conn)
 
             if robots[robot]['flag']:
                 raise ValueError
