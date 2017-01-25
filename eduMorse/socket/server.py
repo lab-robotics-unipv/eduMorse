@@ -1,10 +1,11 @@
+import json
 import pymorse
 import select
 import socket
 import sys
 import time
 
-def receive(conn):
+def receive_old(conn):
     data = b''
     word = b''
     while word != b'\x04':
@@ -13,9 +14,23 @@ def receive(conn):
     message = data.decode('utf-8')
     return message
 
+def send_old(stringa, socket):
+    message = stringa + '\x04'
+    socket.sendall(message.encode('utf-8'))
+
+def receive(conn):
+    data = b''
+    word = b''
+    while word != b'\x04':
+        data += word
+        word = conn.recv(1)
+    message = data.decode('utf-8')
+    message = json.loads(message)
+    return message
 
 def send(stringa, socket):
-    message = stringa + '\x04'
+    message = json.dumps(stringa)
+    message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
 
 def checkString(message, robots):
@@ -27,14 +42,12 @@ def checkString(message, robots):
         return None
     return stringa
 
-
 def checkTimestamp(address, conn):
     timestamp = time.time()
     if timestamp <= address[conn.getpeername()]['timestamp']:
         return None
     address[conn.getpeername()]['timestamp'] = timestamp
     return 0
-
 
 HOST = ''
 PORT = 4001
@@ -55,7 +68,7 @@ if __name__ == '__main__':
         i = 0
         while i < len(robots.keys()):
             conn, addr = s.accept()
-            robot = receive(conn)
+            robot = receive_old(conn)
 
             if robots[robot]['flag']:
                 raise ValueError
@@ -90,13 +103,13 @@ if __name__ == '__main__':
         while True:
             read_list, _, _ = select.select([robots[x]['conn'] for x in robots.keys()], [], [])
             for x in read_list:
-                message = receive(x)
+                message = receive_old(x)
                 stringa = checkString(message, robots)
                 if stringa == None:
                     continue
                 if checkTimestamp(address, x) == None:
                     continue
-                send(stringa[1], robots[stringa[0]]['conn'])
+                send_old(stringa[1], robots[stringa[0]]['conn'])
     except (KeyboardInterrupt, SystemExit):
         s.close()
         for x in robots.keys():

@@ -1,3 +1,4 @@
+import json
 import pymorse
 import pytoml as toml
 import os
@@ -16,7 +17,6 @@ def findFileInPath(filename, extension, paths):
             return os.path.join(path, filename + '.' + extension)
     raise FileNotFoundError('File ' + filename + ' not found')
 
-
 # find the path of a simulation starting from the simulation name
 def findSimuPath(simuName):
     with open(os.path.join(MORSECONFIGPATH, 'config'), 'r') as config:
@@ -25,7 +25,6 @@ def findSimuPath(simuName):
                 lineList = line.split(' = ')
                 return lineList[1].strip('\n')
         return None
-
 
 def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
     stopMode = stopMode.lower()
@@ -40,7 +39,6 @@ def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
     else:
         raise ValueError("Wrong value in 'simulationStopMode'")
 
-
 def strToInt(s):
     try:
         i = int(s)
@@ -49,8 +47,7 @@ def strToInt(s):
         raise
     return i
 
-
-def receive(conn):
+def receive_old(conn):
     data = b''
     word = b''
     while word != b'\x04':
@@ -59,11 +56,24 @@ def receive(conn):
     message = data.decode('utf-8')
     return message
 
-
-def send(stringa, socket):
+def send_old(stringa, socket):
     message = stringa + '\x04'
     socket.sendall(message.encode('utf-8'))
 
+def receive(conn):
+    data = b''
+    word = b''
+    while word != b'\x04':
+        data += word
+        word = conn.recv(1)
+    message = data.decode('utf-8')
+    message = json.loads(message)
+    return message
+
+def send(stringa, socket):
+    message = json.dumps(stringa)
+    message = message + '\x04'
+    socket.sendall(message.encode('utf-8'))
 
 def messageInSocket(s):
     read_list, _, _ = select.select([s], [], [], 0)
@@ -71,7 +81,6 @@ def messageInSocket(s):
         return False
     else:
         return True
-
 
 def stopRobot(simu, robot):
     components = simu.__dict__[robot]
@@ -81,7 +90,6 @@ def stopRobot(simu, robot):
             simu.deactivate(deact)
         except pymorse.MorseServiceFailed:
             pass
-
 
 HOST = 'localhost'
 PORT = 50001
@@ -106,7 +114,7 @@ if __name__ == '__main__':
 
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socketServer:
                 socketServer.connect((HOSTSERVER, PORTSERVER)) # connect to server.py
-                send('SCORE', socketServer)
+                send_old('SCORE', socketServer)
 
                 start = ''
                 while 'Start' not in start:
@@ -170,7 +178,7 @@ if __name__ == '__main__':
                         diffStartTime = time.time() - startTime
                         timeLeft = totalTime - diffStartTime
                         while messageInSocket(s):
-                            message = receive(s)
+                            message = receive_old(s)
                             point = message.split('.')
                             robot = point[0]
                             score = point[1]
