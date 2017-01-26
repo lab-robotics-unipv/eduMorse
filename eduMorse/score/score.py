@@ -1,3 +1,4 @@
+import json
 import pymorse
 import pytoml as toml
 import os
@@ -16,7 +17,6 @@ def findFileInPath(filename, extension, paths):
             return os.path.join(path, filename + '.' + extension)
     raise FileNotFoundError('File ' + filename + ' not found')
 
-
 # find the path of a simulation starting from the simulation name
 def findSimuPath(simuName):
     with open(os.path.join(MORSECONFIGPATH, 'config'), 'r') as config:
@@ -25,7 +25,6 @@ def findSimuPath(simuName):
                 lineList = line.split(' = ')
                 return lineList[1].strip('\n')
         return None
-
 
 def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
     stopMode = stopMode.lower()
@@ -40,7 +39,6 @@ def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
     else:
         raise ValueError("Wrong value in 'simulationStopMode'")
 
-
 def strToInt(s):
     try:
         i = int(s)
@@ -49,7 +47,6 @@ def strToInt(s):
         raise
     return i
 
-
 def receive(conn):
     data = b''
     word = b''
@@ -57,13 +54,13 @@ def receive(conn):
         data += word
         word = conn.recv(1)
     message = data.decode('utf-8')
+    message = json.loads(message)
     return message
 
-
-def send(stringa, socket):
-    message = stringa + '\x04'
+def send(msg, socket):
+    message = json.dumps(msg)
+    message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
-
 
 def messageInSocket(s):
     read_list, _, _ = select.select([s], [], [], 0)
@@ -71,7 +68,6 @@ def messageInSocket(s):
         return False
     else:
         return True
-
 
 def stopRobot(simu, robot):
     components = simu.__dict__[robot]
@@ -81,7 +77,6 @@ def stopRobot(simu, robot):
             simu.deactivate(deact)
         except pymorse.MorseServiceFailed:
             pass
-
 
 HOST = 'localhost'
 PORT = 50001
@@ -171,10 +166,10 @@ if __name__ == '__main__':
                         timeLeft = totalTime - diffStartTime
                         while messageInSocket(s):
                             message = receive(s)
-                            point = message.split('.')
-                            robot = point[0]
-                            score = point[1]
-                            stop = point[2]
+                            for r in message.keys():
+                                robot = r
+                            score = message[robot]['score']
+                            stop = message[robot]['stop']
                             for x in robots.keys():
                                 if x == robot:
                                     robots[x]['collision'] += float(score)

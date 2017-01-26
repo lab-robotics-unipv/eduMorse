@@ -1,3 +1,4 @@
+import json
 import pymorse
 import socket
 import time
@@ -13,8 +14,10 @@ class count:
         self.obj = {}
 
     def send(self, robot, obj, socket):
+        message = {robot : obj}
         if len(obj) > 0:
-            message = robot + '.' + '.'.join(obj) + '\x04'
+            message = json.dumps(message)
+            message = message + '\x04'
             socket.sendall(message.encode('utf-8'))
 
     def counter(self, data):

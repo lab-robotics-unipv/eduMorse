@@ -1,3 +1,4 @@
+import json
 import select
 import socket
 
@@ -8,13 +9,13 @@ def receive(conn):
         data += word
         word = conn.recv(1)
     message = data.decode('utf-8')
+    message = json.loads(message)
     return message
 
-
-def send(stringa, socket):
-    message = stringa + '\x04'
+def send(msg, socket):
+    message = json.dumps(msg)
+    message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
-
 
 def messageInSocket(s):
     read_list, _, _ = select.select([s], [], [], 0)
@@ -22,7 +23,6 @@ def messageInSocket(s):
         return False
     else:
         return True
-
 
 robot_sender = 'robot'
 robot_receiver = 'robot2'
@@ -38,14 +38,18 @@ if __name__ == '__main__':
             start = receive(s)
             print(start)
 
-        message = robot_receiver + '{ciao}'
+        text = 'Hello from robot!'
+        message = {robot_receiver : text}
         send(message, s)
-        message = robot_receiver + '{ciao}'
+
+        text = 'Hello again!'
+        message = {robot_receiver : text}
         send(message, s)
 
         while not messageInSocket(s):
             pass
         data = receive(s)
-        print(data)
+        msg = data['robot']
+        print(msg)
 
         s.close()
