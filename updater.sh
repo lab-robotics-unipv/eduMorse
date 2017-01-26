@@ -3,5 +3,5 @@
 sudo rm -rf /opt/eduMorse
 sudo cp -R ./eduMorse /opt
 cd /opt/eduMorse/libraries/cBindings
-scons
-scons -c
+sudo scons
+sudo scons -c
