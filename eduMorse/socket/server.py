@@ -5,19 +5,6 @@ import socket
 import sys
 import time
 
-def receive_old(conn):
-    data = b''
-    word = b''
-    while word != b'\x04':
-        data += word
-        word = conn.recv(1)
-    message = data.decode('utf-8')
-    return message
-
-def send_old(stringa, socket):
-    message = stringa + '\x04'
-    socket.sendall(message.encode('utf-8'))
-
 def receive(conn):
     data = b''
     word = b''
@@ -28,19 +15,18 @@ def receive(conn):
     message = json.loads(message)
     return message
 
-def send(stringa, socket):
-    message = json.dumps(stringa)
+def send(msg, socket):
+    message = json.dumps(msg)
     message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
 
-def checkString(message, robots):
-    bracket = message.find('{')
-    if bracket <= 0 or bracket == len(message) - 1 or message[-1] != '}':
+def checkMessage(message, robots):
+    for r in message.keys():
+        receiver = r
+    if receiver not in robots.keys():
         return None
-    stringa = [message[:bracket], message[bracket:]]
-    if stringa[0] not in robots.keys():
-        return None
-    return stringa
+    msg = [receiver, message]
+    return msg
 
 def checkTimestamp(address, conn):
     timestamp = time.time()
@@ -51,6 +37,7 @@ def checkTimestamp(address, conn):
 
 HOST = ''
 PORT = 4001
+
 if __name__ == '__main__':
     with pymorse.Morse() as simu:
         robots = {}
@@ -103,13 +90,13 @@ if __name__ == '__main__':
         while True:
             read_list, _, _ = select.select([robots[x]['conn'] for x in robots.keys()], [], [])
             for x in read_list:
-                message = receive_old(x)
-                stringa = checkString(message, robots)
-                if stringa == None:
+                message = receive(x)
+                msg = checkMessage(message, robots)
+                if msg == None:
                     continue
                 if checkTimestamp(address, x) == None:
                     continue
-                send_old(stringa[1], robots[stringa[0]]['conn'])
+                send(msg[1], robots[msg[0]]['conn'])
     except (KeyboardInterrupt, SystemExit):
         s.close()
         for x in robots.keys():

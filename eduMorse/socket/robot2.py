@@ -2,19 +2,6 @@ import json
 import select
 import socket
 
-def receive_old(conn):
-    data = b''
-    word = b''
-    while word != b'\x04':
-        data += word
-        word = conn.recv(1)
-    message = data.decode('utf-8')
-    return message
-
-def send_old(stringa, socket):
-    message = stringa + '\x04'
-    socket.sendall(message.encode('utf-8'))
-
 def receive(conn):
     data = b''
     word = b''
@@ -25,8 +12,8 @@ def receive(conn):
     message = json.loads(message)
     return message
 
-def send(stringa, socket):
-    message = json.dumps(stringa)
+def send(msg, socket):
+    message = json.dumps(msg)
     message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
 
@@ -51,17 +38,20 @@ if __name__ == '__main__':
             start = receive(s)
             print(start)
 
-        message = robot_receiver + '{ciao}'
-        send_old(message, s)
+        text = 'Hello from robot2!'
+        message = {robot_receiver : text}
+        send(message, s)
 
         while not messageInSocket(s):
             pass
-        data = receive_old(s)
-        print(data)
+        data = receive(s)
+        msg = data['robot2']
+        print(msg)
 
         while not messageInSocket(s):
             pass
-        data = receive_old(s)
-        print(data)
+        data = receive(s)
+        msg = data['robot2']
+        print(msg)
 
         s.close()

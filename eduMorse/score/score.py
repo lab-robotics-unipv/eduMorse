@@ -57,8 +57,8 @@ def receive(conn):
     message = json.loads(message)
     return message
 
-def send(stringa, socket):
-    message = json.dumps(stringa)
+def send(msg, socket):
+    message = json.dumps(msg)
     message = message + '\x04'
     socket.sendall(message.encode('utf-8'))
 
