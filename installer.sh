@@ -5,8 +5,8 @@ sudo ln -s /opt/eduMorse/eduMorseCreate.sh /usr/bin/eduMorseCreate
 sudo ln -s /opt/eduMorse/eduMorseRunner.py /usr/bin/eduMorseRunner
 sudo apt-get install -y scons
 cd /opt/eduMorse/libraries/cBindings
-scons
-scons -c
+sudo scons
+sudo scons -c
 
 # Install dependencies
 sudo apt-get install -y cmake
