@@ -1,9 +1,29 @@
 import json
+import os
 import pymorse
+import pytoml as toml
 import select
 import socket
 import sys
 import time
+
+# control if a file exists
+def findFileInPath(filename, extension, paths):
+    for path in paths:
+        if os.path.exists(os.path.join(path, filename)):
+            return os.path.join(path, filename)
+        elif os.path.exists(os.path.join(path, filename + '.' + extension)):
+            return os.path.join(path, filename + '.' + extension)
+    raise FileNotFoundError('File ' + filename + ' not found')
+
+# find the path of a simulation starting from the simulation name
+def findSimuPath(simuName):
+    with open(os.path.join(MORSECONFIGPATH, 'config'), 'r') as config:
+        for line in config:
+            if simuName in line:
+                lineList = line.split(' = ')
+                return lineList[1].strip('\n')
+        return None
 
 def receive(conn):
     data = b''
@@ -37,8 +57,35 @@ def checkTimestamp(address, conn):
 
 HOST = ''
 PORT = 4001
+MORSECONFIGPATH = os.path.join(os.environ['HOME'], '.morse/')
+EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
+GAMESPATH = os.path.join(EDUMORSEPATH, "games")
 
 if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print(len(sys.argv))
+        raise Exception('Wrong number of parameters')
+
+    SIMUPATH = findSimuPath(sys.argv[1])
+    if SIMUPATH == None:
+        raise Exception('Simulation name not found')
+
+    # read configuration file
+    with open(os.path.join(SIMUPATH, "simulation.toml"), 'r') as simulation_file:
+        simulation = toml.loads(simulation_file.read())
+
+        # Check if rules file exists and load it
+        rules_name = simulation['simulation']['name']
+        try:
+            rules_name = findFileInPath(rules_name, 'toml', [SIMUPATH, GAMESPATH])
+        except:
+            raise
+
+        with open(rules_name) as rules_file:
+            rules = toml.loads(rules_file.read())
+            frequency = rules['simulation']['bandwidth']['frequency']
+            length = rules['simulation']['bandwidth']['length']
+
     with pymorse.Morse() as simu:
         robots = {}
         robots['SCORE'] = {}
