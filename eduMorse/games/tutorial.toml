@@ -55,6 +55,9 @@
 		k = 0
 		initialScore = 0
 		stopFlag = false
+	[simulation.bandwidth]
+		frequency = 2
+		length = 10
 	[[simulation.score]]
 		obj = "BALL1"
 		score = 10
