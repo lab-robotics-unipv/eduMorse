@@ -48,11 +48,18 @@ def checkMessage(message, robots):
     msg = [receiver, message]
     return msg
 
-def checkTimestamp(address, conn):
+def checkBandwidth(address, conn, message, frequency, length):
+    # time limitation
     timestamp = time.time()
-    if timestamp <= address[conn.getpeername()]['timestamp']:
+    if (timestamp - address[conn.getpeername()]['timestamp']) < (1/frequency):
         return None
     address[conn.getpeername()]['timestamp'] = timestamp
+    # length limitation
+    for r in message.keys():
+        receiver = r
+    text = message[receiver]
+    if len(text) > length:
+        return None
     return 0
 
 HOST = ''
@@ -81,7 +88,7 @@ if __name__ == '__main__':
         except:
             raise
 
-        with open(rules_name) as rules_file:
+        with open(rules_name, 'r') as rules_file:
             rules = toml.loads(rules_file.read())
             frequency = rules['simulation']['bandwidth']['frequency']
             length = rules['simulation']['bandwidth']['length']
@@ -141,7 +148,7 @@ if __name__ == '__main__':
                 msg = checkMessage(message, robots)
                 if msg == None:
                     continue
-                if checkTimestamp(address, x) == None:
+                if checkBandwidth(address, x, message, frequency, length) == None:
                     continue
                 send(msg[1], robots[msg[0]]['conn'])
     except (KeyboardInterrupt, SystemExit):
