@@ -13,7 +13,7 @@ if len(sys.argv) != 2:
     print("Wrong number of parameters")
     sys.exit(1)
 
-server = subprocess.Popen("python3 {}".format(os.path.join(SERVERPATH, "server.py")).split(" "))
+server = subprocess.Popen("python3 {} {}".format(os.path.join(SERVERPATH, "server.py"), sys.argv[1]).split(" "))
 print("server.py is running")
 time.sleep(1)
 

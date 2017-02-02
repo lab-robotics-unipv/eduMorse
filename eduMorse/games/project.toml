@@ -37,6 +37,9 @@
 		k = 0
 		initialScore = 0
 		stopFlag = false
+	[simulation.bandwidth]
+		frequency = 2
+		length = 20
 	[[layer.score]]
 		obj = "BALL1"
 		score = 10
