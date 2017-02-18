@@ -1,4 +1,5 @@
 import json
+import os
 import select
 import socket
 import time
@@ -27,8 +28,8 @@ def messageInSocket(s):
 
 robot_sender = 'robot'
 robot_receiver = 'robot2'
-HOST = 'localhost'
-PORT = 4001
+HOST = os.environ.get("EDUMORSE_ROBOT_HOST")
+PORT = int(os.environ.get("EDUMORSE_ROBOT_PORT"))
 
 if __name__ == '__main__':
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

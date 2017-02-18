@@ -62,11 +62,11 @@ def checkBandwidth(address, conn, message, frequency, length):
         return None
     return 0
 
-HOST = ''
-PORT = 4001
 MORSECONFIGPATH = os.path.join(os.environ['HOME'], '.morse/')
 EDUMORSEPATH = os.environ.get("EDUMORSEPATH")
 GAMESPATH = os.path.join(EDUMORSEPATH, "games")
+HOST = os.environ.get("EDUMORSE_SERVER_HOST")
+PORT = int(os.environ.get("EDUMORSE_SERVER_PORT"))
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:

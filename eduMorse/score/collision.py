@@ -1,4 +1,5 @@
 import json
+import os
 import pymorse
 import socket
 import time
@@ -44,8 +45,8 @@ class count:
                 self.obj[o]['timestamp'] = data["timestamp"] # timestamp is registered every time
             self.send(self.x, objs, self.socket)
 
-HOST = ''
-PORT = 50000
+HOST = os.environ.get("EDUMORSE_COLLISION_HOST")
+PORT = int(os.environ.get("EDUMORSE_COLLISION_PORT"))
 
 if __name__ == '__main__':
     with pymorse.Morse() as simu:
