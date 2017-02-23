@@ -95,8 +95,8 @@ if __name__ == '__main__':
 
     with pymorse.Morse() as simu:
         robots = {}
-        robots['SCORE'] = {}
-        robots['SCORE']['flag'] = False
+        robots['CONTROLLER'] = {}
+        robots['CONTROLLER']['flag'] = False
         for x in simu.robots:
             robots[x] = {}
             robots[x]['flag'] = False
