@@ -56,12 +56,6 @@ def receive(conn):
     message = json.loads(message)
     return message
 
-def send_layer(robot, score, stop, socket):
-    message = {robot : {"score" : score, "stop" : stop}}
-    message = json.dumps(message)
-    message = message + '\x04'
-    socket.sendall(message.encode('utf-8'))
-
 def send(msg, socket):
     message = json.dumps(msg)
     message = message + '\x04'
@@ -115,7 +109,7 @@ if __name__ == '__main__':
         with open(rules_name) as rules_file:
             rules = toml.loads(rules_file.read())
             # load objects that could be involved in collisions
-            obj = rules['simulation'].get('score', [])
+            objects = rules['simulation'].get('score', [])
 
             # variables for time management and stopping mode
             totalTime = rules['simulation']['time']['totalTime']
@@ -144,6 +138,7 @@ if __name__ == '__main__':
             k = init.get('k', 0)
             initialScore = init.get('initialScore', 0)
             stopFlag = init.get('stopFlag', False)
+            maxScore = 100
 
             # connect to Morse
             with pymorse.Morse() as simu:
@@ -175,5 +170,45 @@ if __name__ == '__main__':
                                 print(start)
 
                             startTime = time.time()
-                            maxScore = 100
                             timeLeft = 1
+
+                            try:
+                                while not ((scoreUntilNoTime and timeLeft <= 0) or (scoreUntilZeroPoints and max([i['score'] for i in robots.values()]) <= 0)):
+                                    diffStartTime = time.time() - startTime
+                                    timeLeft = totalTime - diffStartTime
+                                    if len(objects) != 0:
+                                        while messageInSocket(socketCollision):
+                                            message = receive(socketCollision)
+                                            for r in message.keys():
+                                                robot = r
+                                            objCol = message[robot]
+                                            score = 0
+                                            stop = False
+                                            for o in objects:
+                                                for c in objCol:
+                                                    if c in o['obj']:
+                                                        score += o['score']
+                                                        stop |= o['score']
+                                            for x in robots.keys():
+                                                if x == robot:
+                                                    robots[x]['collision'] += float(score)
+                                                    if stop == 'True':
+                                                        stopRobot(simu, x)
+                                                        robots[x]['stop'] = True
+                                                        robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
+                                    for x in robots.keys():
+                                        if not robots[x]['stop']:
+                                            robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
+                                        if stopFlag:
+                                            robots[x]['score'] = max(robots[x]['score'], 0)
+                                        if robots[x]['score'] == 0 and stopFlag:
+                                            stopRobot(simu, x)
+                                    while messageInSocket(conn):
+                                        request = receive(conn)
+                                        if request == "VIZ_REQUEST":
+                                            message = [robots, diffStartTime]
+                                            send(message, conn)
+                            except (KeyboardInterrupt, SystemExit):
+                                socketCollision.close()
+                                socketController.close()
+                                print("controller.py is shutting down")

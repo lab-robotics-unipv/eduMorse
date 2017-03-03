@@ -2,6 +2,7 @@ import json
 import os
 import select
 import socket
+import time
 
 def receive(conn):
     data = b''
@@ -32,3 +33,22 @@ if __name__ == '__main__':
     # connect to controller.py
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
+
+        request = "VIZ_REQUEST"
+        try:
+            while True:
+                send(request, s)
+                while messageInSocket(s):
+                    message = receive(s)
+                    robots = message[0]
+                    t = message[1]
+                    print('\033[H\033[2J')
+                    print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
+                    print('----------------------------------------------')
+                    for x in robots.keys():
+                        print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
+                    print('----------------------------------------------')
+                    print('{}:{}'.format('Time'.center(5), str(int(t)).center(5)))
+                time.sleep(0.2)
+        except (KeyboardInterrupt, SystemExit):
+            print("viz.py is shutting down")
