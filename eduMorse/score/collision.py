@@ -4,7 +4,6 @@ import pymorse
 import socket
 import time
 
-
 class count:
 
     def __init__(self, x, socket):
@@ -69,6 +68,8 @@ if __name__ == '__main__':
             for x in robots.keys():
                 simu.__dict__[x].eduMorse_default_collision_sensor.subscribe(l[x].counter)
 
-            #print("Press ctrl+C to stop")
-            while True:
-                time.sleep(10)
+            try:
+                while True:
+                    time.sleep(10)
+            except (KeyboardInterrupt, SystemExit):
+                print("collision.py is shutting down")

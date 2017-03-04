@@ -37,7 +37,6 @@ if start == 'start':
     except (KeyboardInterrupt, SystemExit):
         collision.terminate()
         time.sleep(1)
-        print("collision.py is shutting down")
 
         controller.terminate()
         time.sleep(1)
