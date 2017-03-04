@@ -188,11 +188,11 @@ if __name__ == '__main__':
                                                 for c in objCol:
                                                     if c in o['obj']:
                                                         score += o['score']
-                                                        stop |= o['score']
+                                                        stop |= o['stop']
                                             for x in robots.keys():
                                                 if x == robot:
                                                     robots[x]['collision'] += float(score)
-                                                    if stop == 'True':
+                                                    if stop:
                                                         stopRobot(simu, x)
                                                         robots[x]['stop'] = True
                                                         robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
