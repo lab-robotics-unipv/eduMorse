@@ -26,6 +26,15 @@ def messageInSocket(s):
     else:
         return True
 
+def outputPrint(robots, t):
+    print('\033[H\033[2J')
+    print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
+    print('----------------------------------------------')
+    for x in robots.keys():
+        print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
+    print('----------------------------------------------')
+    print('{}:{}'.format('Time'.center(5), str(int(t)).center(5)))
+
 HOST = os.environ.get("EDUMORSE_VIZ_HOST")
 PORT = int(os.environ.get("EDUMORSE_VIZ_PORT"))
 
@@ -35,20 +44,21 @@ if __name__ == '__main__':
         s.connect((HOST, PORT))
 
         request = "VIZ_REQUEST"
+        end = True
         try:
-            while True:
+            while end:
                 send(request, s)
                 while messageInSocket(s):
                     message = receive(s)
-                    robots = message[0]
-                    t = message[1]
-                    print('\033[H\033[2J')
-                    print('{}| {}'.format('Robot'.center(20), 'Score'.center(20)))
-                    print('----------------------------------------------')
-                    for x in robots.keys():
-                        print('{}| {}'.format(x.center(20), str(round(robots[x]['score'], 1)).center(20)))
-                    print('----------------------------------------------')
-                    print('{}:{}'.format('Time'.center(5), str(int(t)).center(5)))
+                    if message[0] == "END_SIMULATION":
+                        robots = message[1]
+                        t = message[2]
+                        outputPrint(robots, t)
+                        end = False
+                    else:
+                        robots = message[0]
+                        t = message[1]
+                        outputPrint(robots, t)
                 time.sleep(0.2)
         except (KeyboardInterrupt, SystemExit):
             print("viz.py is shutting down")

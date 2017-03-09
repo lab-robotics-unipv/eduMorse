@@ -25,6 +25,7 @@ def findSimuPath(simuName):
                 return lineList[1].strip('\n')
         return None
 
+# set stopping mode of the simulation
 def checkStopMode(stopMode, scoreUntilZeroPoints, scoreUntilNoTime):
     stopMode = stopMode.lower()
     if stopMode == 'stopwhenzeropoints':
@@ -68,6 +69,7 @@ def messageInSocket(s):
     else:
         return True
 
+# disable components of a robot
 def stopRobot(simu, robot):
     components = simu.__dict__[robot]
     for c in components:
@@ -177,6 +179,7 @@ if __name__ == '__main__':
                                     diffStartTime = time.time() - startTime
                                     timeLeft = totalTime - diffStartTime
                                     if len(objects) != 0:
+                                        # messages from collision.py
                                         while messageInSocket(socketCollision):
                                             message = receive(socketCollision)
                                             for r in message.keys():
@@ -203,11 +206,16 @@ if __name__ == '__main__':
                                             robots[x]['score'] = max(robots[x]['score'], 0)
                                         if robots[x]['score'] == 0 and stopFlag:
                                             stopRobot(simu, x)
+                                    # communication with viz.py
                                     while messageInSocket(conn):
                                         request = receive(conn)
                                         if request == "VIZ_REQUEST":
                                             message = [robots, diffStartTime]
                                             send(message, conn)
+                                # final message to viz.py
+                                message = ["END_SIMULATION", robots, diffStartTime]
+                                send(message, conn)
+                                time.sleep(2)
                             except (KeyboardInterrupt, SystemExit):
                                 socketCollision.close()
                                 socketController.close()
