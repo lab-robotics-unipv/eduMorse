@@ -49,3 +49,5 @@ echo "export EDUMORSE_COLLISION_HOST='localhost'" >> $HOME/.bashrc
 echo "export EDUMORSE_COLLISION_PORT=50000" >> $HOME/.bashrc
 echo "export EDUMORSE_CONTROLLER_HOST='localhost'" >> $HOME/.bashrc
 echo "export EDUMORSE_CONTROLLER_PORT=50001" >> $HOME/.bashrc
+echo "export EDUMORSE_VIZ_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_VIZ_PORT=50001" >> $HOME/.bashrc

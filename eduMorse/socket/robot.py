@@ -44,7 +44,7 @@ if __name__ == '__main__':
         message = {robot_receiver : text}
         send(message, s)
 
-        time.sleep(0.5)
+        time.sleep(0.6)
         text = 'Hello again!'
         message = {robot_receiver : text}
         send(message, s)

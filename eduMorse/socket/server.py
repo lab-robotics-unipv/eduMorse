@@ -88,19 +88,22 @@ if __name__ == '__main__':
         except:
             raise
 
+        # variables about bandwidth
         with open(rules_name, 'r') as rules_file:
             rules = toml.loads(rules_file.read())
             frequency = rules['simulation']['bandwidth']['frequency']
             length = rules['simulation']['bandwidth']['length']
 
+    # connect to Morse to obtain list of robots, also controller.py is a client
     with pymorse.Morse() as simu:
         robots = {}
-        robots['SCORE'] = {}
-        robots['SCORE']['flag'] = False
+        robots['CONTROLLER'] = {}
+        robots['CONTROLLER']['flag'] = False
         for x in simu.robots:
             robots[x] = {}
             robots[x]['flag'] = False
 
+    # open connection to clients
     try:
         address = {}
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -110,17 +113,14 @@ if __name__ == '__main__':
         while i < len(robots.keys()):
             conn, addr = s.accept()
             robot = receive(conn)
-
             if robots[robot]['flag']:
                 raise ValueError
-
             robots[robot]['conn'] = conn
             robots[robot]['flag'] = True
             address[addr] = {}
             address[addr]['robot'] = robot
             address[addr]['timestamp'] = 0
             i = i + 1
-
     except KeyError:
         print('Wrong robot name')
         s.close()
@@ -136,10 +136,12 @@ if __name__ == '__main__':
                 robots[x]['conn'].close()
         sys.exit(1)
 
+    # send start message to clients
     for x in robots.keys():
         send('Start', robots[x]['conn'])
     print('Start send')
 
+    # relay messages between clients
     try:
         while True:
             read_list, _, _ = select.select([robots[x]['conn'] for x in robots.keys()], [], [])

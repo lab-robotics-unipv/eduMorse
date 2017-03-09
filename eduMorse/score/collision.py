@@ -4,7 +4,6 @@ import pymorse
 import socket
 import time
 
-
 class count:
 
     def __init__(self, x, socket):
@@ -22,7 +21,8 @@ class count:
             socket.sendall(message.encode('utf-8'))
 
     def counter(self, data):
-        if data["collision"]: # collision occurred
+        # collision occurred
+        if data["collision"]:
             objs = []
 
             for o in data["objects"].split(','):
@@ -49,11 +49,13 @@ HOST = os.environ.get("EDUMORSE_COLLISION_HOST")
 PORT = int(os.environ.get("EDUMORSE_COLLISION_PORT"))
 
 if __name__ == '__main__':
+    # connect to Morse
     with pymorse.Morse() as simu:
         robots = {}
         for x in simu.robots:
             robots[x] = {}
 
+        # open a socket for controller.py
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((HOST, PORT))
             s.listen(1)
@@ -66,6 +68,8 @@ if __name__ == '__main__':
             for x in robots.keys():
                 simu.__dict__[x].eduMorse_default_collision_sensor.subscribe(l[x].counter)
 
-            #print("Press ctrl+C to stop")
-            while True:
-                time.sleep(10)
+            try:
+                while True:
+                    time.sleep(10)
+            except (KeyboardInterrupt, SystemExit):
+                print("collision.py is shutting down")
