@@ -186,19 +186,13 @@ if __name__ == '__main__':
                                                 robot = r
                                             objCol = message[robot]
                                             score = 0
-                                            stop = False
                                             for o in objects:
                                                 for c in objCol:
                                                     if c in o['obj']:
                                                         score += o['score']
-                                                        stop |= o['stop']
                                             for x in robots.keys():
                                                 if x == robot:
                                                     robots[x]['collision'] += float(score)
-                                                    if stop:
-                                                        stopRobot(simu, x)
-                                                        robots[x]['stop'] = True
-                                                        robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
                                     for x in robots.keys():
                                         if not robots[x]['stop']:
                                             robots[x]['score'] = initialScore + k*diffStartTime + robots[x]['collision']
@@ -206,6 +200,14 @@ if __name__ == '__main__':
                                             robots[x]['score'] = max(robots[x]['score'], 0)
                                         if robots[x]['score'] == 0 and stopFlag:
                                             stopRobot(simu, x)
+                                    # messages from server.py
+                                    while messageInSocket(socketServer):
+                                        message = receive(socketServer)
+                                        for r in message.keys():
+                                            robot = r
+                                        if message[robot] == 'STOP':
+                                            stopRobot(simu, robot)
+                                            robots[robot]['stop'] = True
                                     # communication with viz.py
                                     while messageInSocket(conn):
                                         request = receive(conn)
