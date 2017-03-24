@@ -26,6 +26,10 @@ def messageInSocket(s):
     else:
         return True
 
+def stopRobot(robot, socket):
+    msg = {'CONTROLLER' : {robot : 'STOP'}}
+    send(msg, socket)
+
 robot_sender = 'robot'
 robot_receiver = 'robot2'
 HOST = os.environ.get("EDUMORSE_ROBOT_HOST")

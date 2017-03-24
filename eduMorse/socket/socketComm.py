@@ -24,6 +24,10 @@ def messageInSocket(s):
     else:
         return True
 
+def stopRobot(robot, socket):
+    msg = {'CONTROLLER' : {robot : 'STOP'}}
+    send(msg, socket)
+
 if __name__ == '__main__':
     robot_sender = 'robot'
     robot_receiver = 'robot2'
