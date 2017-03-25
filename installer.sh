@@ -36,6 +36,18 @@ sudo make install
 morse check
 
 # Setting the environment variables
-echo "# MORSELAB variables" >> $HOME/.bashrc
+echo "# EDUMORSE variables" >> $HOME/.bashrc
 echo "export PYTHONPATH=PYTHONPATH:/usr/local/lib/python3/dist-packages/" >> $HOME/.bashrc
 echo "export EDUMORSEPATH=/opt/eduMorse" >> $HOME/.bashrc
+echo "export EDUMORSE_SERVER_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_SERVER_PORT=4001" >> $HOME/.bashrc
+echo "export EDUMORSE_ROBOT_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_ROBOT_PORT=4001" >> $HOME/.bashrc
+echo "export EDUMORSE_ROBOT2_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_ROBOT2_PORT=4001" >> $HOME/.bashrc
+echo "export EDUMORSE_COLLISION_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_COLLISION_PORT=50000" >> $HOME/.bashrc
+echo "export EDUMORSE_CONTROLLER_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_CONTROLLER_PORT=50001" >> $HOME/.bashrc
+echo "export EDUMORSE_VIZ_HOST='localhost'" >> $HOME/.bashrc
+echo "export EDUMORSE_VIZ_PORT=50001" >> $HOME/.bashrc

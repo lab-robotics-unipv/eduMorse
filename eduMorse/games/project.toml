@@ -37,19 +37,18 @@
 		k = 0
 		initialScore = 0
 		stopFlag = false
-	[[layer.score]]
+	[simulation.bandwidth]
+		frequency = 2
+		length = 20
+	[[simulation.score]]
 		obj = "BALL1"
 		score = 10
-		stop = false
-	[[layer.score]]
+	[[simulation.score]]
 		obj = "BALL2"
 		score = 10
-		stop = false
-	[[layer.score]]
+	[[simulation.score]]
 		obj = "Wall"
 		score = -10
-		stop = false
-	[[layer.score]]
+	[[simulation.score]]
 		obj = "target"
 		score = 100
-		stop = true
