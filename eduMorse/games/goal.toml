@@ -61,16 +61,12 @@
 	[[simulation.score]]
 		obj = "BALL1"
 		score = 10
-		stop = false
 	[[simulation.score]]
 		obj = "BALL2"
 		score = 10
-		stop = false
 	[[simulation.score]]
 		obj = "Wall"
 		score = -10
-		stop = false
 	[[simulation.score]]
 		obj = "target"
 		score = 100
-		stop = true

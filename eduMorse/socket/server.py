@@ -150,6 +150,10 @@ if __name__ == '__main__':
                 msg = checkMessage(message, robots)
                 if msg == None:
                     continue
+                # special messages to controller.py
+                if msg[0] == 'CONTROLLER':
+                    send(msg[1]['CONTROLLER'], robots[msg[0]]['conn'])
+                    continue
                 if checkBandwidth(address, x, message, frequency, length) == None:
                     continue
                 send(msg[1], robots[msg[0]]['conn'])
