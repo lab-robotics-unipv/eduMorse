@@ -28,7 +28,7 @@ public class Robot {
 
         speedAct = new SpeedActuator(name, "motion", "127.0.0.1", 4000);
 
-        irSens = new IrSensor(name, "IR1", "127.0.0.1",4000);
+        irSens = new IrSensor(name, "ir1", "127.0.0.1",4000);
         irSens.setSensorListener(new IrSensorListener());
 
         poseSens = new PoseSensor(name, "pose", "127.0.0.1",4000);
