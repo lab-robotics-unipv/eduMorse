@@ -4,7 +4,7 @@
 #include "socket.h"
 
 int main() {
-    
+
     // Set the address and the port for the socket communication
     char address[] = "127.0.0.1";
     int serverPort = 4000;
@@ -49,16 +49,16 @@ int main() {
 
     // Get the ir #1 measurement
     irMeas irmeas1;
-    flag = getIR(f, parent, "IR1", &irmeas1);
+    flag = getIR(f, parent, "ir1", &irmeas1);
     if ( flag < 0 ) {
         printf("Error 4\n");
         fclose(f);
         return 3;
     }
-    
+
     // Get the ir #2 measurement
     irMeas irmeas2;
-    flag = getIR(f, parent, "IR2", &irmeas2);
+    flag = getIR(f, parent, "ir2", &irmeas2);
     if ( flag < 0 ) {
         printf("Error 4\n");
         fclose(f);
@@ -67,22 +67,22 @@ int main() {
 
     // Get the ir #3 measurement
     irMeas irmeas3;
-    flag = getIR(f, parent, "IR3", &irmeas3);
+    flag = getIR(f, parent, "ir3", &irmeas3);
     if ( flag < 0 ) {
         printf("Error 4\n");
         fclose(f);
         return 3;
     }
-    
+
     // Get the ir #4 measurement
     irMeas irmeas4;
-    flag = getIR(f, parent, "IR4", &irmeas4);
+    flag = getIR(f, parent, "ir4", &irmeas4);
     if ( flag < 0 ) {
         printf("Error 4\n");
         fclose(f);
         return 3;
-    } 
-    
+    }
+
     // Close the socket
     fclose(f);
 
